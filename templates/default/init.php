@@ -29,7 +29,7 @@ jQuery.fn.baruMenu = function(){ // THIS LINE MUST  NOT BE CHANGED!
 </script>
 <style>
 *{
-	font-family: Myriad Pro, Calibri;
+	font-family: Myriad Pro, Calibri, Arial;
 }
 
 /* Menu-styles */

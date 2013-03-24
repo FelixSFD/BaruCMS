@@ -25,7 +25,7 @@ if($_GET["deleteinstaller"] == "ok"){
 	</script>
 	<style>
 	*{
-		font-family: Myriad Pro, Calibri;
+		font-family: Myriad Pro, Calibri, Arial;
 	}
 	body{
 		background-image: url('img/admin_bg.png');
