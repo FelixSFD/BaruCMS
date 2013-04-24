@@ -27,6 +27,9 @@ __CHANGE YOUR PASSWORD AND E-MAIL, AFTER INSTALLING!__
 ## Version 0.2
 * new backend
  * add custom modules
- * nice design (https://github.com/82OderSo/Flatend )
+ * nice design (Based on: https://github.com/82OderSo/Flatend )
 * improved frontend
 * ...
+
+# Thanks
+Thanks to @janh97 for the new backend design! (https://github.com/82OderSo/Flatend )
