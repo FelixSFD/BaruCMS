@@ -1,7 +1,2 @@
-php_value upload_max_filesize 300M
-php_value post_max_size 500M
-php_value memory_limit 1024M
-
-RewriteEngine On
-RewriteRule ^([^/]*).html$ index.php?p=$1
-RewriteRule ^index.html$ index.php
+RewriteEngine on 
+RewriteRule ^(.*).html$ index.php?page=$1

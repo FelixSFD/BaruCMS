@@ -1,14 +1,3 @@
-<?php
-if(!$ECM["login_ok"]){
-	?>
-	<div id="loginDialog" title="<?php echo $lang_login; ?>">
-	<?php
-	include "admin/loginForm.php";
-	?>
-	</div>
-	<?
-}
-?>
 <div id="footer">
 	<center>
 		<small>
@@ -29,7 +18,7 @@ if(!$ECM["login_ok"]){
 					<?php
 				}
 			}
-			
+			/*
 			if($ECM["login_ok"]){
 				?>
 				 - <a href="admin.php" target="_blank"><?php echo $lang_adminbereichTitle; ?></a>
@@ -39,7 +28,7 @@ if(!$ECM["login_ok"]){
 				?>
 				 - <a href="#" onclick="loginForm()"><?php echo $lang_login; ?></a>
 				<?php
-			}
+			}*/
 			?>
 		</small><br>
 		<?php

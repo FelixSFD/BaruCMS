@@ -1,0 +1,23 @@
+<table>
+	<tr>
+		<td>Vorname:</td>
+		<td><input type="text" id="vorname" placeholder="Vorname"></td>
+	</tr>
+	<tr>
+		<td>Nachname:</td>
+		<td><input type="text" id="nachname" placeholder="Nachname"></td>
+	</tr>
+	<tr>
+		<td>E-Mail:</td>
+		<td><input type="email" id="email" placeholder="E-Mail"></td>
+	</tr>
+	<tr>
+		<td>Passwort:</td>
+		<td><input id="pw" onfocus="hinweisWeg()" type="password" id="pw" placeholder="Passwort"></td>
+		<td><a id="pwGenerator" onclick="generatePW()" href="javascript:void(0)">zuf&auml;lliges Passwort</a></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><button onclick="saveNew()">Speichern</button><span id="ajaxStatus"></span></td>
+	</tr>
+</table>

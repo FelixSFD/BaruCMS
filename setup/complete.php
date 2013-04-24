@@ -151,6 +151,7 @@ error_reporting(0);
 			</div>
 			<div id="start">
 				<center><h1>Baru CMS 1.0 BETA has been successfully installed!</h1></center>
+				<center>Falls die Installation nochmal startet, bitte "setup.php" in "setup.php.bak" umbenennen!</center>
 			</div>
 		</div>
 		<div id="bottom" align=center>
@@ -160,7 +161,7 @@ error_reporting(0);
 		</div>
 	</div>
 	<div id="footer">
-		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0 - Baru CMS version: 0.1</small>
+		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.1 - Baru CMS version: 0.2</small>
 	</div>
 </body>
 </html>

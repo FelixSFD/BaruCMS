@@ -1,60 +1,35 @@
-<ul id="main-menu">
-	<li><a href="index.html"><? echo $lang_startseite; ?></a></li>
-	<?
-	$menu = mysql_query("SELECT * FROM ".$db_prefix."Menu WHERE Sichtbarkeit = 1 AND mainMenu = 0", $mysql);
-		if(mysql_error()){
-			fehler(mysql_error());
+<?php
+class menuCategory
+{
+	public $name;
+	public $links;
+	public function addLink($id, $url, $title)
+	{
+		$this->links .= '<li><a href="'.$url.'.html">'.$title.'</a></li>';
+	}
+}
+
+$menuReady = '<ul id="main-menu">';
+$menuReady .= '<li><a href="index.php">Home</a></li>';
+$categoriesQuery = $db->query("SELECT * FROM ".$db_prefix."Categories ORDER BY Name");
+while($categoriesResult = $categoriesQuery->fetch_object()){
+	if($categoriesResult->visibility == "public" or ($categoriesResult->visibility == "private" && $baru["login_ok"])){
+		$cat = new menuCategory;
+		$cat->name = $categoriesResult->Name;
+		$menuReady .= '<li data-status="closed" data-id="'.$categoriesResult->ID .'" class="layer1 closed">';
+		$menuReady .= '<a href="javascript:void(0);">'.$categoriesResult->Name .'</a>';
+		$menuReady .= '<ul class="layer2">';
+		$pagesQuery = $db->query("SELECT * FROM ".$db_prefix."Pages WHERE Category = '".$categoriesResult->ID."'");
+		while($pagesResult = $pagesQuery->fetch_object()){
+			$cat->addLink($pagesResult->ID, $pagesResult->url, $pagesResult->Titel);
 		}
-		while($m = mysql_fetch_array($menu)) {
-			?>
-			<li class="layer1 closed" data-id="<? echo $m["ID"]; ?>" data-status="closed">
-				<a href="<? echo $m["Link"]; ?>"><? echo $m["Titel"]; ?></a>
-				<?
-				$menu2counter = mysql_query("SELECT * FROM ".$db_prefix."Menu WHERE Sichtbarkeit = 1 AND mainMenu = ".$m["ID"], $mysql);
-				while($m2counter = mysql_fetch_array($menu2counter)) {
-					$anzahl2++;
-				}
-				if($anzahl2 >= 1){
-					?>
-					<ul class="layer2">
-						<?
-						$menu2 = mysql_query("SELECT * FROM ".$db_prefix."Menu WHERE Sichtbarkeit = 1 AND mainMenu = ".$m["ID"], $mysql);
-						while($m2 = mysql_fetch_array($menu2)) {
-							?>
-							<li>
-								<a href="<? echo $m2["Link"]; ?>"><? echo $m2["Titel"]; ?></a>
-								<?
-								$menu3counter = mysql_query("SELECT * FROM ".$db_prefix."Menu WHERE Sichtbarkeit = 1 AND mainMenu = ".$m2["ID"], $mysql);
-								while($m3counter = mysql_fetch_array($menu3counter)) {
-									$anzahl3++;
-								}
-								if($anzahl3 >= 1){
-									?>
-									<ul>
-										<?
-										$menu3 = mysql_query("SELECT * FROM ".$db_prefix."Menu WHERE Sichtbarkeit = 1 AND mainMenu = ".$m2["ID"], $mysql);
-										while($m3 = mysql_fetch_array($menu3)) {
-											?>
-											<a href="<? echo $m3["Link"]; ?>"><? echo $m3["Titel"]; ?></a>
-											<?
-										}
-										?>
-									</ul>
-									<?
-								}
-								$anzahl3 = 0;
-								?>
-							</li>
-							<?
-						}
-						?>
-					</ul>
-					<?
-				}
-				$anzahl2 = 0;
-				?>
-			</li>
-			<?
-		}
-	?>
-</ul>
+		$menuReady .= $cat->links;
+		$menuReady .= '</ul>';
+		$menuReady .= '</li>';
+	}
+	
+}
+$menuReady .= "</ul>";
+
+echo $menuReady;
+?>

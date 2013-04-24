@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <config>
 	<version_info>
-		<build>b002</build>
-		<build_date>1364146619</build_date>
-		<version>0.1.0.1</version>
+		<build>b003</build>
+		<build_date>1366823397</build_date>
+		<version>0.2</version>
 		<app_name>Baru CMS 1.0 BETA</app_name>
 		<app_id>default_b1</app_id>
 	</version_info>

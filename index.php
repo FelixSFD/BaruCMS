@@ -1,303 +1,220 @@
-<?php include "system/config.php"; ?>
 <?php
-function datum($timestamp){
-	
-	$monat[1] = $lang_month_jan; 
-	$monat[2] = $lang_month_feb; 
-	$monat[3] = $lang_month_mar; 
-	$monat[4] = $lang_month_apr; 
-	$monat[5] = $lang_month_may; 
-	$monat[6] = $lang_month_jun; 
-	$monat[7] = $lang_month_jul; 
-	$monat[8] = $lang_month_aug; 
-	$monat[9] = $lang_month_sep; 
-	$monat[10] = $lang_month_oct; 
-	$monat[11] = $lang_month_nov; 
-	$monat[12] = $lang_month_dec; 
-	
-	$tag[1] = $lang_day_mon; 
-	$tag[2] = $lang_day_tue; 
-	$tag[3] = $lang_day_wed; 
-	$tag[4] = $lang_day_thu; 
-	$tag[5] = $lang_day_fri; 
-	$tag[6] = $lang_day_sat; 
-	$tag[7] = $lang_day_sun; 
-	
-	$uhrzeit = date("H:i", $timestamp);
-	$monatZahl = date("n", $timestamp);
-	$jahr = date("Y", $timestamp);
-	$tagZahl1 = date("j", $timestamp);
-	$tagZahl2 = date("w", $timestamp);
-	
-	$datumFull = $tag[$tagZahl2].", ".$tagZahl1.". ".$monat[$monatZahl]." ".$jahr." - ".$uhrzeit;
-	
-	echo "<span class='datum'>".$datumFull."</span>";
+/*
+Name: index.php
+Dateipfad: /
+Version: 2.0
+Erstellt: 6.6.2012
+Letzte wichtige Änderung: 23.4.2013
+	- Arbeit an Version 2.0
+Autoren: Felix Deil
+Beschreibung: index.php im Frontend
+ToDo:
+	- fertigstellung der Template-Integration
+
+(c) Felix Deil 2012-2013
+Diese Datei ist Teil von BaruCMS.
+*/
+error_reporting (E_ALL && ~E_NOTICE);
+if(file_exists("setup.php")){
+	header("Location: setup.php");
 }
-?>
-<html>
-<head>
-	<title><?php echo getSetting("PAGE_TITLE"); ?></title>
-	<script type="text/javascript" src="/cms/languages/loader.js"></script>
-	<link rel="icon" href="img/favicons/<?php echo $favicon[0]; ?>"/>
-	<link rel="apple-touch-icon" href="img/favicons/favicon_green.png"/>
-	<style>
-	#header{
-		height: <?php echo $setStyleHeader[0]; ?>;
-		background: url('img/header.png');
-		background-size: <?php echo $setStyleHeader[1]; ?>;
-		background-position: center;
-		background-repeat: no-repeat;
-	}
-	
-	#wartungInfo{
-		position: fixed;
-		right: 10px;
-		bottom: 10px;
-		background-color: red;
-		height: 40px;
-		box-shadow: 0px 0px 20px yellow;
-		border-radius: 10px;
-	}
-	#wartungInfo b{
-		position: relative;
-		text-decoration: blink;
-		top: 10px;
-	}
-	
-	#slowInfo{
-		position: fixed;
-		left: 10px;
-		bottom: 10px;
-		background-color: red;
-		height: 40px;
-		box-shadow: 0px 0px 20px yellow;
-		border-radius: 10px;
-	}
-	#slowInfo b{
-		position: relative;
-		text-decoration: blink;
-		/*top: 10px;*/
-	}
-	
-	#userList tr td:hover{
-		background: grey;
-	}
-	
-	/*
-	.left{
-		float: left;
-	}
-	.right{
-		float: right;
-	}
-	*/
-	.clear{
-		clear:left;
-		clear:right;
-	}
-	
-	.closeX{
-		position: relative;
-		top: 3px;
-		left: 3px;
-	}
-	
-	.editLink{
-		font-weight: normal;
-		font-size: 9pt;
-	}
-	
-	#banner{
-		position: absolute;
-		color: black;
-		top: 20px;
-		left: -40px;
-		height: 25px;
-		width: 150px;
-		background: orange;
-		transform: rotate(-45deg);
-		-moz-transform: rotate(-45deg);
-		-webkit-transform: rotate(-45deg);
-		box-shadow: 2px 2px 5px #000;
-	}
-	
-	.pointer{
-		cursor: pointer;
-	}
-	
-	/* Dynamisch */
-	html{
-		<?php
-		if($setStyle[1] == "1"){
-			echo "background: url('img/bg.png')";
-		} else {
-			echo "background: #".$setStyle[0];
+include "adminAPI.php";
+include "system/classes/baruPassword.class.php";
+
+# create content
+class content
+{
+	private $content;
+	private $pageID;
+	private $pageType;
+	private $module;
+
+	public function setPageType($type, $id, $module)
+	{
+		if($type == "module"){
+			$this->pageType = "module";
+			$this->pageID = false;
+			$this->module = $module;
 		}
-		?>
-	}
-	</style>
-</head>
-<body>
-<?php
-if(substr($_SERVER["SCRIPT_FILENAME"], -9) == "index.php"){
-	$verz = "templates/";
-	$dateien = scandir($verz);
-	foreach($dateien as $t) {
-		if($t == getSetting("TEMPLATE")){
-			$templatePath = "templates/".$t."/init.php";
-			if(file_exists($templatePath)){
-				include $templatePath;
-			}
+		if($type == "page"){
+			$this->pageType = "page";
+			$this->pageID = $id;
+			$this->module = false;
+		}
+		if($type == "index"){
+			$this->pageType = "index";
+			$this->pageID = false;
+			$this->module = false;
 		}
 	}
-}
-
-/*if(!$html5){
-	?>
-	<div id="oldBrowser" title="Browser veraltet">
-		<p><? echo $lang_oldBrowser1; ?> <a href="http://www.mozilla.org/">Mozilla Firefox</a> <? echo $lang_oldBrowser2; ?></p>
-	</div>
-	<?
-}*/
-
-if($wartung2){
-	?>
-	<div id="wartungInfo">
-		<b>&nbsp;&nbsp;&nbsp;<?php echo $lang_wartungsmodusAktiv2; ?>&nbsp;&nbsp;&nbsp;</b>
-	</div>
-	<?php
-}
-?>
-	<div id="main">
-		<div id="header">
-			<?php
-			if(getSetting("SEARCH_ACTIVE")){
-				?>
-				<script>
-				function search(){
-					var string = $("#searchField").val();
-					if(string.length >= <?php echo getSetting("SEARCH_MIN_LENGTH"); ?>){
-						jQuery.ajax({
-							type: "GET",
-							url: "search.php?q="+string,
-							success: function(response)
-							{
-								if(response){
-									//alert(response);
-									$("#searchList").html(response);
-									$("#content").hide();
-									$("#searchList").show();
-								} else {
-									alert("Fehler beim Ausf&uuml;hren der AJAX-Anfrage!");
-									$("#content").show();
-									$("#searchList").hide();
-								}
-							}
-						});
-					} else {
-						$("#content").show();
-						$("#searchList").hide();
-					}
-				}
-				</script>
-				<div id="search">
-					<input onkeyup="search()" type="search" id="searchField" placeholder="<?php echo $lang_search; ?>">
-				</div>
-				<?php
-			}
-			?>
-		</div>
-		<div id="banner">
-			<center><b>BETA</b></center>
-		</div>
-		<div id="menu" class="<?php echo $setMenu[0]; ?>">
-			<?php include "menu/menu.php"; ?>
-		</div>
-		<br><br><br>
-		<div id="searchList">
+	public function returnPage()
+	{
+		include "db_config.php";
+		include "system/mysqli_connect.php";
+		include "system/classes/baruDate.class.php";
 		
-		</div>
-		<div id="content">
-			<?php
-			if(!$_GET["p"] or $_GET["p"] == "index"){
-				include "startseite.php";
-			} else if($_GET["p"] == "not-ready"){
-				fehler("Diese Seite wurde nicht vollständig verarbeitet!");
-			} else {
-				$pages = mysql_query("SELECT * FROM ".$db_prefix."Pages WHERE url = '".$_GET["p"]."'", $mysql);
-				if(mysql_error()){
-					$error404 = true;
-				}
-				$p = mysql_fetch_array($pages);
-				if(!$p["ID"]){
-					$error404 = true;
-				}
-				if($p["im_Blog"] == "1"){
-					echo "<small><a href='index.html'>".$lang_back."</a><br>".date("H:i - d.m.Y", $p["Datum"])."</small>";
+		if($this->pageType == "index"){ # Startseite
+			$blogPreviewTemplate = file("templates/".getSetting("TEMPLATE")."/blogPreview.html");
+			$pagesQuery = $db->query("SELECT * FROM ".$db_prefix."Pages WHERE im_Blog = '1' ORDER BY Datum DESC");
+			$result = '
+				<div id="welcome">'.getSetting("HELLO_TEXT").'</div>
+			';
+			while($pagesResult = $pagesQuery->fetch_object()){
+				$date = new baruDate;
+				$date->timestamp = $pagesResult->Datum;
+				
+				$preview = $pagesResult->Inhalt;
+				$preview = strip_tags($preview, "<b><i><a><p>");
+				$preview = substr($preview, 0, 400);
+				
+				
+				$pageCategoryID = $pagesResult->Category;
+				$categoryQuery = $db->query("SELECT * FROM ".$db_prefix."Categories WHERE ID = '".$pageCategoryID."'");
+				$categoryResult = $categoryQuery->fetch_object();
+				
+				$pageCategory = $categoryResult->url;
+				$pageLink = $pagesResult->url .".html";
+				$pageLinkJS = "document.location.href='".$pageLink."';";
+				
+				$float = "left";
+				
+				$newElement = $blogPreviewTemplate;
+				$newElement = str_replace("%baru-page-id%", $pagesResult->ID, $newElement);
+				$newElement = str_replace("%baru-page-date%", $date->returnDate(), $newElement);
+				$newElement = str_replace("%baru-page-link%", $pageLink, $newElement);
+				$newElement = str_replace("%baru-page-link-js%", $pageLinkJS, $newElement);
+				$newElement = str_replace("%baru-page-title%", $pagesResult->Titel, $newElement);
+				$newElement = str_replace("%baru-page-text%", $preview, $newElement);
+				$newElement = str_replace("%baru-page-float%", $float, $newElement);
+				
+				foreach($newElement as $blogPreview){
+					$result .= $blogPreview;
 				}
 				
-				if($ECM["rights"]["EDIT_PAGE"]){
-					?>
-					<script>
-					function editPageTitle(){
-						$("#editPageTitleDiv").fadeIn("fast");
-						$("#pageTitleH1").fadeOut("fast");
-						document.getElementById("titel").focus();
-						return false;
-					}
-					
-					function savePageTitle(){
-						$("#editPageTitleDiv").fadeOut("fast");
-						$("#pageTitleH1").fadeIn("fast");
-						var titelNeu = $("#titel").val();
-						$("#titleLoader").load("save.php?p=<?php echo $_GET["p"]; ?>&titel="+encodeURI(titelNeu));
-						$("#pageTitle").html(titelNeu);
-						return false;
-					}
-					</script>
-					<div id="editPageTitleDiv" style="display: none;">
-						<form onsubmit="return savePageTitle();">
-							<b><?php echo $lang_adminbereichPagesListTitle; ?>:</b><input type="text" id="titel" size="59" value="<?php echo $p["Titel"]; ?>">
-						</form>
-						<span id="titleLoader"></span>
-					</div>
-					<h1 id="pageTitleH1"><span id="pageTitle"><?php echo $p["Titel"]; ?></span> <sup class="editLink"><a href="" onclick="return editPageTitle();">[<?php echo $lang_edit; ?>]</a></sup></h1>
-					<?php
+				if($float == "left"){
+					$float = "right";
 				} else {
-					?>
-					<h1><?php echo $p["Titel"]; ?></h1>
-					<?php
-				}
-				//Text bearbeiten
-				$textFertig = $p["Inhalt"];
-				$textFertig = autolink($textFertig, array("target"=>"_blank"));
-				$textFertig = str_replace("http:/<a ", "<a ", $textFertig);
-				$textFertig = bbCodeIMG($textFertig);
-				$textFertig = bbCodeYT($textFertig);
-				echo $textFertig;
-				if($p["im_Blog"] == "1"){
-					echo "<hr>";
-					
-					$autor = mysql_query("SELECT * FROM ".$db_prefix."User WHERE ID = ".$p["Autor"], $mysql);
-					if(mysql_error()){
-						$autor = $lang_unbekannt; 
-					}
-					$a = mysql_fetch_array($autor);
-					$autor = $a["Vorname"]." ".$a["Nachname"]; 
-					echo "<small>".$lang_author.": ".$autor."</small>";
-				}
-				
-				if($error404 == true){
-					fehler($lang_error404);
-				} else {
-					?>
-					<div id="socialshareprivacy"></div>
-					<?php
+					$float = "left";
 				}
 			}
-			?>
+		}
+		
+		if($this->pageType == "page"){ # Seite
+			$showPageTemplate = file("templates/".getSetting("TEMPLATE")."/showPage.html");
+			
+			$pagesQuery = $db->query("SELECT * FROM ".$db_prefix."Pages WHERE url = '".$_GET["page"]."'");
+			$pagesResult = $pagesQuery->fetch_object();
+			
+			# Datum
+			$date = new baruDate;
+			$date->timestamp = $pagesResult->Datum;
+			
+			# Text
+			$content = $pagesResult->Inhalt;
+			
+			# Kategorie
+			$categoryID = $pagesResult->Category;
+			$categoryQuery = $db->query("SELECT * FROM ".$db_prefix."Categories WHERE ID = '".$categoryID."'");
+			$categoryResult = $categoryQuery->fetch_object();
+			$pageCategory = $categoryResult->Name;
+			
+			# Autor
+			$authorID = $pagesResult->Autor;
+			$authorQuery = $db->query("SELECT * FROM ".$db_prefix."User WHERE ID = '".$authorID."'");
+			$authorResult = $authorQuery->fetch_object();
+			$authorName = $authorResult->Vorname ." ".$authorResult->Nachname;
+			
+			# Daten einsetzen
+			$showPageTemplate = str_replace("%baru-page-title%", $pagesResult->Titel, $showPageTemplate);
+			$showPageTemplate = str_replace("%baru-page-content%", $content, $showPageTemplate);
+			$showPageTemplate = str_replace("%baru-page-date%", $date->returnDate(), $showPageTemplate);
+			$showPageTemplate = str_replace("%baru-page-author-name%", $authorName, $showPageTemplate);
+			$showPageTemplate = str_replace("%baru-page-category%", $pageCategory, $showPageTemplate);
+			
+			# Fertige Seite ausgeben
+			foreach($showPageTemplate as $showPageTemplateLine){
+				$result .= $showPageTemplateLine;
+			}
+		}
+		
+		return $result;
+	}
+	
+	public function returnPageType()
+	{
+		return $this->pageType;
+	}
+}
+
+# Fill template
+function fillTemplate($templateFile){
+	include_once "adminAPI.php";
+	$result = $templateFile;
+	
+	# head START
+	$pageTitle = getSetting("PAGE_TITLE");
+	$headerIncludes = '
+		<script src="http://code.jquery.com/jquery-2.0.0.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	';
+	# head END
+	
+	# search START
+	$searchBox = '
+		<div id="search">
+			<input onkeyup="search()" type="search" id="searchField" placeholder="Suche">
 		</div>
-		<?php include "footer.php"; ?>
-	</div>
-</body>
-</html>
+	';
+	$searchList = '<div id="searchList"></div>';
+	# search END
+	
+	if(getSetting("SEARCH_ACTIVE")){
+		$headerIncludes .= '<script src="system/js/search.js"></script>';
+	}
+	
+	# content START
+	$content = new content;
+	if($_GET["page"] && !$_GET["module"]){
+		$pageType = "page";
+	} else if($_GET["module"]){
+		$pageType = "module";
+	} else {
+		$pageType = "index";
+	}
+	$content->setPageType($pageType, $_GET["page"], $_GET["module"]);
+	$contentReady = $content->returnPage();
+	# content END
+	
+	# other
+	$thisTemplatePath = "templates/".getSetting("TEMPLATE");
+	# other END
+	
+	$result = str_replace("%baru-title%", $pageTitle, $result);
+	$result = str_replace("%baru-header-includes%", $headerIncludes, $result);
+	$result = str_replace("%baru-this-template-path%", $thisTemplatePath, $result);
+	
+	$result = str_replace("%baru-search-box%", $searchBox, $result);
+	$result = str_replace("%baru-search-list%", $searchList, $result);
+	
+	$result = str_replace("%baru-content%", $contentReady, $result);
+	return $result;
+}
+
+# Load template-data
+$frontendModulePath = "backend/backendModules/".$_GET["module"].".baru/frontendPage.php";
+if(!$_GET["page"] && file_exists($frontendModulePath)){
+	include $frontendModulePath;
+} else if(!$_GET["module"]){
+	$templateIndex = file("templates/".getSetting("TEMPLATE")."/index.html");
+	$templateIndex = fillTemplate($templateIndex);
+	
+	# index.php ausgeben
+	foreach($templateIndex as $templateIndexLine){
+		if(strpos($templateIndexLine, "%baru-menu%")){
+			$templateIndexLine = str_replace("%baru-menu%", "", $templateIndexLine);
+			include "menu/menu.php";
+		}
+		echo $templateIndexLine;
+	}
+}
+?>

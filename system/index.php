@@ -1,1 +1,4 @@
-</center><h1>ERROR 403 - FORBIDDEN!</h1></center>
+<?php
+include_once "../adminAPI.php";
+echo errorcode(403);
+?>

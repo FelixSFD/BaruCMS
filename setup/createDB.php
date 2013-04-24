@@ -1,6 +1,6 @@
 <?
-#error_reporting(E_ALL|E_STRICT);
-error_reporting(0);
+error_reporting(E_ALL|E_STRICT);
+#error_reporting(0);
 ?>
 <html>
 <head>
@@ -153,26 +153,30 @@ error_reporting(0);
 				<center><h1>Creating tables</h1></center>
 				<?php
 				include_once "../db_config.php";
+				$documentRoot = $_SERVER["DOCUMENT_ROOT"];
+				global $rootPath;
+				if(file_exists($documentRoot.dirname($_SERVER["SCRIPT_NAME"])."/db_config.php")){
+					$rootPath = $documentRoot.dirname($_SERVER["SCRIPT_NAME"]);
+				} else if(file_exists(getcwd()."/../db_config.php")){
+					$rootPath = getcwd()."/..";
+				} else if(file_exists(getcwd()."/../../db_config.php")){
+					$rootPath = getcwd()."/../..";
+				} else if(file_exists(getcwd()."/../../../db_config.php")){
+					$rootPath = getcwd()."/../../..";
+				} else if(file_exists(getcwd()."/../../../../db_config.php")){
+					$rootPath = getcwd()."/../../../..";
+				}
+				include "../system/classes/baruPassword.class.php";
+				
 				$mysql = mysql_connect($db_host, $db_user, $db_pass);
 				mysql_select_db($db_name, $mysql);
 				echo mysql_error();
-				//Dateien
-				mysql_query("CREATE TABLE ".$db_prefix."Files (
+				//Categoriey
+				mysql_query("CREATE TABLE ".$db_prefix."Categories (
 				ID INT AUTO_INCREMENT PRIMARY KEY,
-				Typ TEXT NOT NULL,
 				Name TEXT NOT NULL,
-				Code TEXT NOT NULL,
-				Uploader INT NOT NULL,
-				Datum INT NOT NULL,
-				Folder INT NOT NULL);", $mysql);
-
-				//Menü
-				mysql_query("CREATE TABLE ".$db_prefix."Menu (
-				ID INT AUTO_INCREMENT PRIMARY KEY,
-				Titel TEXT NOT NULL,
-				Link TEXT NOT NULL,
-				Sichtbarkeit INT NOT NULL,
-				mainMenu INT NOT NULL);", $mysql);
+				url TEXT NOT NULL,
+				visibility TEXT NOT NULL);", $mysql);
 
 				//User
 				mysql_query("CREATE TABLE ".$db_prefix."User (
@@ -182,7 +186,7 @@ error_reporting(0);
 				Email TEXT NOT NULL,
 				Passwort TEXT NOT NULL,
 				`Group` INT NOT NULL,
-				`FacebookID` TEXT NOT NULL,
+				`RegistrationDate` TEXT NOT NULL,
 				Status INT NOT NULL);", $mysql);
 
 				//Seiten
@@ -193,6 +197,7 @@ error_reporting(0);
 				Autor INT NOT NULL,
 				url TEXT NOT NULL,
 				im_Blog INT NOT NULL,
+				Category INT NOT NULL,
 				Datum TEXT NOT NULL);", $mysql);
 
 				//Rights
@@ -218,39 +223,28 @@ error_reporting(0);
 				ID INT NOT NULL,
 				Name TEXT NOT NULL,
 				Value TEXT NOT NULL);", $mysql);
-
-				mysql_query("INSERT INTO `".$db_prefix."User` VALUES ('0', 'Super', 'User', '123@456.com', '57bef80655b3df1d1224005d7430d078', '1', '', '1')", $mysql); //password is: barucms
-				mysql_query("INSERT INTO `".$db_prefix."Groups` VALUES ('1', 'Administrator')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'MANAGE_GROUPS', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'ADD_USER', '1')", $mysql);
+				$now = time();
+				mysql_query("INSERT INTO `".$db_prefix."User` VALUES ('1', 'Super', 'User', 'super@user.com', 'password', '1', '".$now."', '1')", $mysql); //password is: barucms
+				mysql_query("INSERT INTO `".$db_prefix."Groups` VALUES ('1', 'Administratoren')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_USER', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_USER_PW', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'DELETE_USER', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'ADD_Folder', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'ADD_File', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'DELETE_File', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'ADD_PAGE', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_PAGE', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'DELETE_PAGE', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'ADD_FILE', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'DELETE_FILE', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'ADD_MENU', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_MENU', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'DELETE_MENU', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_STYLE', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_GENERAL_SETTINGS', '1')", $mysql);
+				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_USERGROUPS', '1')", $mysql);
+				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'UPDATE_SETTINGS', '1')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'UPDATE_SYSTEM', '1')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'VIEW_SYSTEM_INFO', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'MANAGE_PLUGINS', '1')", $mysql);
-				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'MANAGE_TEMPLATES', '1')", $mysql);
+				mysql_query("INSERT INTO `".$db_prefix."Rights` VALUES ('', 'EDIT_PAGES', '1')", $mysql);
 
-				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'HELLO_TEXT', '<h2>Danke, dass du Baru CMS installiert hast</h2>')", $mysql);
+				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'HELLO_TEXT', '<h2>Danke, dass du Baru CMS installiert hast</h2><a href=\"backend/backend.php\">Zum Backend</a>')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'LANGUAGE', 'DE')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'PAGE_TITLE', 'Baru CMS')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'WARTUNG', '')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'SEARCH_ACTIVE', '1')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'SEARCH_MIN_LENGTH', '4')", $mysql);
 				mysql_query("INSERT INTO `".$db_prefix."Settings` VALUES ('', 'TEMPLATE', 'default')", $mysql);
+				
+				//Passwort anpassen
+				$pw = new baruPassword;
+				$hashedPassword = $pw->hashPassword("super@user.com", "barucms"); // Für Super User
+				mysql_query("UPDATE `".$db_prefix."User` SET `Passwort` = '".$hashedPassword."' WHERE ID = '1'", $mysql);
 				?>
 			</div>
 		</div>
@@ -261,7 +255,7 @@ error_reporting(0);
 		</div>
 	</div>
 	<div id="footer">
-		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0 - Baru CMS version: 0.1</small>
+		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.1 - Baru CMS version: 0.2</small>
 	</div>
 </body>
 </html>
