@@ -6,7 +6,7 @@ Baru CMS is a small webbased content management system, mainly created by a germ
 * easy to use
 * easy to customize
   * you can install your own templates or modify the default
-* login via Facebook
+  * you can code your own backend modules
 * Usergroups and -rights management
 * allround WYSIWYG-editor (tinyMCE)
 * ... (just try it and you'll see)
@@ -17,8 +17,16 @@ Baru CMS is a small webbased content management system, mainly created by a germ
 3. open "setup.php"
 4. Follow the instructions on the screen
 The installer will add the following user:
- E-Mail: 123@456.com
+ E-Mail: super@user.com
  Password: barucms
 
 
 __CHANGE YOUR PASSWORD AND E-MAIL, AFTER INSTALLING!__
+
+# Changelog
+## Version 0.2
+* new backend
+ * add custom modules
+ * nice design (https://github.com/82OderSo/Flatend )
+* improved frontend
+* ...
