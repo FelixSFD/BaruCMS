@@ -1,4 +1,4 @@
-<?
+<?php
 #error_reporting(E_ALL|E_STRICT);
 error_reporting(0);
 ?>
@@ -153,7 +153,7 @@ error_reporting(0);
 			</div>
 			<div id="start">
 				<center><h1>Installationsvorbereitungen</h1></center>
-				<?
+				<?php
 				$install_info = "<table>";
 				//file_get_contents()
 				$check_FGT = file_get_contents("http://google.de");
@@ -216,11 +216,11 @@ error_reporting(0);
 					?>
 					<br><br>
 					<center><button onclick="weiter()">Installation starten!</button></center>
-					<?
+					<?php
 				} else {
 					?>
 					<center><h2>Baru CMS kann nicht installiert werden!</h2>Bitte prüfe, ob die oben gelisteten Funktionen installiert und aktiviert sind!</center>
-					<?
+					<?php
 				}
 				?>
 			</div>
@@ -232,7 +232,7 @@ error_reporting(0);
 		</div>
 	</div>
 	<div id="footer">
-		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.1 - Baru CMS version: 0.2</small>
+		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.2 - Baru CMS version: 0.2</small>
 	</div>
 </body>
 </html>
