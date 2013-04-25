@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 #echo $_SERVER["DOCUMENT_ROOT"].dirname($_SERVER["SCRIPT_NAME"]);
 #include $_SERVER["DOCUMENT_ROOT"].dirname($_SERVER["SCRIPT_NAME"])."/../adminAPI.php";
@@ -180,7 +179,7 @@ include $rootPath."/adminAPI.php";
 				<center>
 					<form method="post" id="loginForm" action="backend.php">
 						<label for="email"><b>E-Mail:</b></label><br>
-						<input type="email" id="email" name="email" placeholder="<? echo $lang_username; ?>" size="35"><br>
+						<input type="email" id="email" name="email" placeholder="E-Mail" size="35"><br>
 						<label for="pw"><b>Passwort:</b></label><br>
 						<input type="password" id="pw" name="pw" placeholder="<? echo $lang_password; ?>" size="35"><br>
 						<br>
