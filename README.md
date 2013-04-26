@@ -1,4 +1,4 @@
-# About Baru CMS 1.0
+# About Baru CMS 1.0 BETA
 Baru CMS is a small webbased content management system, mainly created by a german student.
 
 # Features
@@ -11,10 +11,12 @@ Baru CMS is a small webbased content management system, mainly created by a germ
 * allround WYSIWYG-editor (tinyMCE)
 * ... (just try it and you'll see)
 
+You have an idea for BaruCMS? Just create a new issue. I'm happy about constructive suggestions.
+
 # How to install
 1. Copy all files to your webserver
 2. Fill out the "db_config.php"
-3. open "setup.php"
+3. open "setup.php" (or "index.php". It'll redirect you to the setup)
 4. Follow the instructions on the screen
 The installer will add the following user:
  E-Mail: super@user.com
