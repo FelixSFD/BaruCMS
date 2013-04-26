@@ -185,10 +185,13 @@ function statusReset(){
 </script>
 <div class="contentHead">
 	<h1>Inhalte</h1>
-	<h3><a href="#pages">Seiten &raquo;</a></h3>
-	<h3><a href="#categories">Kategorien &raquo;</a></h3>
+	<h3>
+		<a href="#section-pages">Seiten &raquo;</a>
+		<br>
+		<a href="#section-categories">Kategorien &raquo;</a>
+	</h3>
 </div>
-<h2 id="pages">Seiten</h2>
+<h2 id="section-pages">Seiten <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
 <h3><a href="javascript:void(0);" onclick="newPage()">Neue Seite anlegen &raquo;</a></h3>
 <table id="baruManager" class="zebra">
 	<thead>
@@ -217,7 +220,7 @@ function statusReset(){
 	</tbody>
 </table>
 
-<h2 id="categories">Kategorien</h2>
+<h2 id="section-categories">Kategorien <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
 <h3><a href="javascript:void(0);" onclick="newCategory()">Neue Kategorie anlegen &raquo;</a></h3>
 <script>
 function loadCatList(){
@@ -225,7 +228,36 @@ function loadCatList(){
 		$(".baruManagerCatItem").click(function(){
 			var catID = $(this).data("id");
 			var catURL = $(this).data("url");
-			$("#baruCatEditor").load("backendModules/pages.baru/categoriesEditor.php?catID="+catID);
+			$("#baruCatEditor").load("backendModules/pages.baru/categoriesEditor.php?catID="+catID, function(){
+				$("#deleteCat").fadeIn("normal");
+			});
+		});
+		$("#deleteCat").click(function(){
+			deleteCheck = confirm("Soll diese Kategorie unwiederruflich gelöscht werden?");
+			if(deleteCheck){
+				var form_data = {
+					id: $("#catID").val(),
+					is_ajax: 1
+				};
+				
+				jQuery.ajax({
+					type: "POST",
+					url: "backendModules/pages.baru/categoriesDelete.php",
+					data: form_data,
+					success: function(response)
+					{
+						if(response == "success"){
+							$("#baruCatEditor").html("<center>Keine Kategorie ausgew&auml;hlt!</center>");
+							setTimeout(statusReset, 2500);
+							loadCatList();
+							$("#deleteCat").fadeOut("normal");
+						} else {
+							var errorMsg = "Ein unbekannter Fehler ist aufgetreten!";
+							alert(errorMsg);
+						}
+					}
+				});
+			}
 		});
 	});
 }
@@ -300,7 +332,7 @@ function newCategory(){
 <table id="baruCatManager" class="zebra">
 	<thead>
 		<th width="30%">Kategorien</th>
-		<th></th>
+		<th><button id="deleteCat" class="ui-state-default ui-corner-all" style="display: none;">L&ouml;schen</button></th>
 	</thead>
 	<tbody valign="top">
 		<tr>

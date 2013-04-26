@@ -3,7 +3,11 @@ if(getRights("EDIT_USER", $userinfo["Group"])){
 ?>
 <div class="contentHead">
 	<h1>Benutzer</h1>
-	<h3><a href="javascript:void(0)" onclick="newUser()">Neuen Benutzer anlegen &raquo;</a></h3>
+	<h3>
+		<a href="#section-userlist">Benutzerliste &raquo;</a>
+		<br>
+		<a href="#section-usergroups">Benutzergruppen &raquo;</a>
+	</h3>
 </div>
 <script>
 $(document).ready(function() { 
@@ -141,7 +145,8 @@ function generatePW(){
 	$("#autoPwHinweis").fadeIn("normal");
 }
 </script>
-<h2>Benutzerliste</h2>
+<h2 id="section-userlist">Benutzerliste <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
+<h3><a href="javascript:void(0)" onclick="newUser()">Neuen Benutzer anlegen &raquo;</a></h3>
 <table id="baruManager" class="zebra">
 	<thead>
 		<th width="30%">Benutzer</th>
@@ -169,13 +174,76 @@ function generatePW(){
 	</tbody>
 </table>
 <script>
+function newUsergroup(){
+	$("#baruEditor2").load('backendModules/members.baru/groupNew.html');
+}
+
 function loadList2(){
 	$("#list2").load("backendModules/members.baru/list.php?type=groups", function(){
 		$(".baruManagerItemGroups").click(function(){
 			var groupID = $(this).data("id");
-			$("#baruEditor2").load("backendModules/members.baru/groupEditor.php?groupID="+groupID);
+			$("#baruEditor2").load("backendModules/members.baru/groupEditor.php?groupID="+groupID, function(){
+				$("#deleteGroup").fadeIn("normal");
+			});
+		});
+		$("#deleteGroup").click(function(){
+			deleteCheck = confirm("Soll dieser Benutzer unwiederruflich gelöscht werden?");
+			if(deleteCheck){
+				var form_data = {
+					id: $("#groupID").val(),
+					is_ajax: 1
+				};
+				
+				jQuery.ajax({
+					type: "POST",
+					url: "backendModules/members.baru/groupDelete.php",
+					data: form_data,
+					success: function(response)
+					{
+						if(response == "success"){
+							//alert("Gelöscht!");
+							$("#baruEditor2").html("<center>Keine Benutzergruppe ausgew&auml;hlt!</center>");
+							setTimeout(statusReset, 2500);
+							loadList2();
+							$("#deleteGroup").fadeOut("normal");
+							pageEdited = false;
+						} else {
+							var errorMsg = "Ein unbekannter Fehler ist aufgetreten!";
+							alert(errorMsg);
+						}
+					}
+				});
+			}
 		});
 	});
+}
+
+function saveNewGroup(){
+	var ajaxStatus = $("#ajaxStatus2");
+	ajaxStatus.html("Speichern...");
+	var form_data = {
+		name: $("#gName").val(),
+		is_ajax: 1
+	};
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "backendModules/members.baru/groupAdd.php",
+		data: form_data,
+		success: function(response)
+		{
+			if(response == "success"){
+				ajaxStatus.html("Gespeichert!");
+				$("#baruEditor2").html("<center>Keine Benutzergruppe ausgew&auml;hlt!</center>");
+				setTimeout(statusReset, 2500);
+				loadList2();
+			} else {
+				var errorMsg = "Ein unbekannter Fehler ist aufgetreten!";
+				ajaxStatus.html(errorMsg);
+			}
+		}
+	});
+	return false;
 }
 
 function saveGroup(){
@@ -232,11 +300,12 @@ function saveGroup(){
 <?php
 if(getRights("EDIT_USERGROUPS", $userinfo["Group"])){
 ?>
-<h2>Benutzergruppen</h2>
+<h2 id="section-usergroups">Benutzergruppen <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
+<h3><a href="javascript:void(0)" onclick="newUsergroup()">Neue Benutzergruppe anlegen &raquo;</a></h3>
 <table id="baruManager2" class="zebra">
 	<thead>
 		<th width="30%">Gruppen</th>
-		<th><span id="editorButtons2"><button id="delete" class="ui-state-default ui-corner-all" style="display: none;">L&ouml;schen</button></span></th>
+		<th><span id="editorButtons2"><button id="deleteGroup" class="ui-state-default ui-corner-all" style="display: none;">L&ouml;schen</button></span></th>
 	</thead>
 	<tbody valign="top">
 		<tr>

@@ -35,6 +35,7 @@ include $rootPath."/adminAPI.php";
 	<script src="http://code.jquery.com/jquery-2.0.0.js"></script>
 	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 	<script type="text/javascript" src="../system/jQuery/plugins/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+	<script src="./src/js/dropdown.js"></script>
 	<script type="text/javascript">
 		$().ready(function() {
 			$('textarea.advancedEditor').tinymce({
@@ -77,13 +78,102 @@ include $rootPath."/adminAPI.php";
 		}
 	</script>
 	<style>
-	#userMenu ul.closed{
-		display: none;
+	.userDropdown:before {
+		content: '';
+		background-image: url('../img/userDropdown.png');
+		background-position: 0px 0px;
+		width: 12px;
+		height: 11px;
+		float: left;
+		margin-top: 3px;
+		margin-right: 10px;
 	}
-	#userMenu ul{
+
+	.userDropdown:hover:before {
+		background-position: 0px 11px;
+	}
+
+	.userDropdown:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-top: 5px solid #cccccc;
 		position: absolute;
-		background: white;
-		text-align: left;
+		margin-left: 7px;
+		margin-top: 6px;
+	}
+
+	.userDropdown:hover:after {
+		border-top: 5px solid #ffffff;
+	}
+
+	ul.dropdownMenu:before {
+		content: '';
+		position: absolute;
+		width: 0px;
+		height: 0px;
+		border-style: solid;
+		border-width: 0 10px 10px 10px;
+		border-color: transparent transparent #ffffff transparent;
+		margin-top: -10px;
+		margin-left: 20px;
+	}
+
+	ul.dropdownMenu {
+		position: absolute;
+		background: #ffffff;
+		z-index: 1;
+		margin-top: 10px!important;
+		border-radius: 2px;
+		border: 1px solid #cccccc;
+		display: none;
+		width: 200px;
+		padding-bottom: 5px!important;
+	}
+
+	ul.dropdownMenu li, ul.dropdownMenu li a {
+		float: none!important;
+		text-transform: none!important;
+		color: #333333!important;
+		padding: 5px 20px 5px 45px!important;
+		margin: 0px!important;
+		font-weight: normal;
+	}
+
+	ul.dropdownMenu li:hover {
+		background: #f1f1f1;
+		cursor: pointer;
+	}
+
+	.userPic {
+		-webkit-border-radius: 50em;
+		-moz-border-radius: 50em;
+		border-radius: 50em;
+		width: 40px;
+		height: 40px;
+		background-size: cover;
+		background-position: center top;
+		float: left;
+		margin-right: 15px;
+	}
+
+	.userOverview {
+		height: 50px;
+		padding: 20px 30px 5px 20px!important;
+		color: #999999;
+	}
+
+	.userOverview span.role {
+		text-transform: none;
+		font-size: 10px;
+	}
+
+	ul.dropdownMenu li img {
+		position: absolute;
+		margin-top: 1px;
+		margin-left: -25px;
 	}
 	</style>
 </head>
@@ -91,23 +181,47 @@ include $rootPath."/adminAPI.php";
 	<div id="header">
 		<div class="container">
 			<div class="pageTitle">BaruCMS Administration</div>
-			<div id="headerMenu">
-				<ul>
+				<div id="headerMenu">
+					<ul>
 					<?php
 					if($baru["login_ok"]){
+						$usergroupQuery = $db->query("SELECT * FROM ".$db_prefix."Groups WHERE ID = '".$userinfo["Group"]."'");
+						$usergroupResult = $usergroupQuery->fetch_object();
 						?>
-						<li id="userMenu">
-							<a href="javascript:void(0)" onclick="toggleUserMenu()" class="userDropdown"><?php echo $userinfo["Vorname"]; ?></a>
-							<ul class="closed">
-								<li><a onclick="document.location.href='?action=logout';" class="userMenuLink">[logout]</a></li>
+						<li>
+							<a class="userDropdown" href="#"><?php echo $userinfo["Vorname"]; ?></a>
+							<ul class="dropdownMenu">
+								<div class="userOverview">
+									<div class="userPic" style="background-image: url('./src/img/dummyUser.png');"></div>
+									<?php echo $userinfo["Vorname"]." ".$userinfo["Nachname"]; ?><br />
+									<span class="role"><?php echo $usergroupResult->Name; ?></span>
+								</div>
+								<?php
+								$verz = $rootPath."/backend/backendModules/";
+								$dateien = scandir($verz);
+								foreach($dateien as $t) {
+									$moduleConfigPath = $rootPath."/backend/backendModules/".$t."/config.xml";
+									if(file_Exists($moduleConfigPath)){
+										$moduleConfigXML = simplexml_load_file($moduleConfigPath);
+									}
+									if(substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php") && $moduleConfigXML->config->display == "dropdown"){
+										$info = file($rootPath."/backend/backendModules/".$t."/info_".getSetting("LANGUAGE").".txt");
+										?>
+										<li onclick="location.href='?module=<?php echo substr($t, 0, -5); ?>'"><img height="16px" alt=" " src="./src/img/icons/<?php echo $moduleConfigXML->config->icon; ?>" /><?php echo $moduleConfigXML->info->name; ?></li>
+										<?php
+									}
+								};
+								?>
+								<li onclick="window.open('https://github.com/FelixSFD/BaruCMS')"><img src="./src/img/icons/compass_16x16.png" />Hilfe</li>
+								<li onclick="location.href='?action=logout'"><img src="./src/img/icons/arrow_left_alt1_16x16.png" />Logout</li>
 							</ul>
 						</li>
 						<?php
-					}
-					?>
-					<li><a href="../index.php" target="_BLANK">Frontend</a></li>
-				</ul>
-			</div>
+						}
+						?>
+						<li><a href="../index.php">Frontend</a></li>
+					</ul>
+				</div>
 		</div>
 	</div>
 	<?php
@@ -124,7 +238,11 @@ include $rootPath."/adminAPI.php";
 					$dateien = scandir($verz);
 					$anzahl = 0;
 					foreach($dateien as $t) {
-						if($t != "." && $t != ".." && $t != "readme.txt" && substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php")){
+						$moduleConfigPath = $rootPath."/backend/backendModules/".$t."/config.xml";
+						if(file_Exists($moduleConfigPath)){
+							$moduleConfigXML = simplexml_load_file($moduleConfigPath);
+						}
+						if($t != "." && $t != ".." && $t != "readme.txt" && substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php") && $moduleConfigXML->config->display == "default"){
 							$info = file($rootPath."/backend/backendModules/".$t."/info_".getSetting("LANGUAGE").".txt");
 							echo '<div class="menuDivider"></div>';
 							?>
@@ -181,7 +299,7 @@ include $rootPath."/adminAPI.php";
 						<label for="email"><b>E-Mail:</b></label><br>
 						<input type="email" id="email" name="email" placeholder="E-Mail" size="35"><br>
 						<label for="pw"><b>Passwort:</b></label><br>
-						<input type="password" id="pw" name="pw" placeholder="<? echo $lang_password; ?>" size="35"><br>
+						<input type="password" id="pw" name="pw" placeholder="Passwort" size="35"><br>
 						<br>
 						<input type="hidden" name="action" value="login">
 						<button type="submit">LOGIN</button>

@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<moduleconfig>
+	<info>
+		<name>Updates</name>
+		<author>Felix Deil</author>
+		<version>0.2</version>
+	</info>
+	<config>
+		<display>dropdown</display>
+		<icon>cloud_download_24x24.png</icon>
+		<show_footer>true</show_footer>
+	</config>
+</moduleconfig>

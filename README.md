@@ -24,6 +24,13 @@ The installer will add the following user:
 __CHANGE YOUR PASSWORD AND E-MAIL, AFTER INSTALLING!__
 
 # Changelog
+## Version 0.3
+* Usergroups and page categories are now deletable
+* Flatend-Dropdown-Menu added
+* more possibilities for custom modules
+ * choose, how they are displayed (main menu, userdropdown or hidden)
+* bugfixes
+ 
 ## Version 0.2
 * new backend
  * add custom modules

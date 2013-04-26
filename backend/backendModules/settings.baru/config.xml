@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<moduleconfig>
+	<info>
+		<name>Einstellungen</name>
+		<author>Felix Deil</author>
+		<version>0.2</version>
+	</info>
+	<config>
+		<display>default</display>
+		<show_footer>true</show_footer>
+	</config>
+</moduleconfig>

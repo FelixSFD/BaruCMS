@@ -1,7 +1,7 @@
 <?
 $db_host = "localhost";
-$db_user = "";
-$db_pass = "";
-$db_name = "";
-$db_prefix = "baruCMS_";
+$db_user = "root";
+$db_pass = "swr3";
+$db_name = "BaruDev";
+$db_prefix = "dev_";
 ?>

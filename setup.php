@@ -232,7 +232,7 @@ error_reporting(0);
 		</div>
 	</div>
 	<div id="footer">
-		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.2 - Baru CMS version: 0.2</small>
+		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.2 - Baru CMS version: 0.3</small>
 	</div>
 </body>
 </html>
