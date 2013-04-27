@@ -3,7 +3,7 @@
 	<info>
 		<name>Updates</name>
 		<author>Felix Deil</author>
-		<version>0.2</version>
+		<version>0.3</version>
 	</info>
 	<config>
 		<display>dropdown</display>
