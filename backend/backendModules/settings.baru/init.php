@@ -194,12 +194,12 @@ function statusReset3(){
 				$dateien = scandir($verz);
 				foreach($dateien as $t) {
 					if($t != "." && $t != ".." && $t != "readme.txt"){
-						$info = file($rootPath."/templates/".$t."/info.txt");
+						$info = simplexml_load_file($rootPath."/templates/".$t."/config.xml");
 						$anzahl++;
 						if(getSetting("TEMPLATE") == $t){
-							echo '<option value="'.$t.'" selected>'.$info[0].'</option>';
+							echo '<option value="'.$t.'" selected>'.$info->name.'</option>';
 						} else {
-							echo '<option value="'.$t.'">'.$info[0].'</option>';
+							echo '<option value="'.$t.'">'.$info->name.'</option>';
 						}
 					}
 				};

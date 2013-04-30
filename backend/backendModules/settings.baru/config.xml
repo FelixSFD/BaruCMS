@@ -3,7 +3,7 @@
 	<info>
 		<name>Einstellungen</name>
 		<author>Felix Deil</author>
-		<version>0.2</version>
+		<version>0.4</version>
 	</info>
 	<config>
 		<display>default</display>

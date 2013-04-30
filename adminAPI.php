@@ -185,6 +185,15 @@ function strtoURL($eingabe)
 	return zufallszahl(4)."-".$ausgabe;
 }
 
+/*
+function help($text){
+	if(getSetting("SHOW_HELP")){
+		return 'title="'.$text.'"';
+	} else {
+		return false;
+	}
+}*/
+
 
 if($_POST["action"] == "login" && $_GET["action"] != "logout"){
 	$login_abfrage = mysql_query("SELECT * FROM ".$db_prefix."User WHERE Email = '".$_POST["email"]."'", $mysql);

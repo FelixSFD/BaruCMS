@@ -26,6 +26,10 @@ The installer will add the following user:
 __CHANGE YOUR PASSWORD AND E-MAIL, AFTER INSTALLING!__
 
 # Changelog
+## Version 0.4
+* MVC (Model, View, Controller) for the frontend
+* new template-API
+
 ## Version 0.3
 * Usergroups and page categories are now deletable
 * Flatend-Dropdown-Menu added
