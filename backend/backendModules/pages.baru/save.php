@@ -6,7 +6,7 @@ if(!$db->query("UPDATE `".$db_prefix."Pages` SET `Titel` = '".$_POST["title"]."'
 	$error = true;
 }
 
-if(!$db->query("UPDATE `".$db_prefix."Pages` SET `Inhalt` = '".$_POST["inhalt"]."' WHERE ID = ".$_POST["id"])) {
+if(!$db->query("UPDATE `".$db_prefix."Pages` SET `Inhalt` = '".htmlentities($_POST["inhalt"])."' WHERE ID = ".$_POST["id"])) {
 	$error = true;
 }
 

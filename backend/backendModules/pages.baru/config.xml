@@ -3,7 +3,7 @@
 	<info>
 		<name>Inhalte</name>
 		<author>Felix Deil</author>
-		<version>0.3</version>
+		<version>0.4.2</version>
 	</info>
 	<config>
 		<display>default</display>
