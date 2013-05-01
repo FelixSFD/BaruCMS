@@ -1,11 +1,13 @@
 <?php
+include "db_config.php";
+include "system/mysqli_connect.php";
 class menuCategory
 {
 	public $name;
 	public $links;
-	public function addLink($id, $url, $title)
+	public function addLink($id, $type, $title)
 	{
-		$this->links .= '<li><a href="'.$url.'.html">'.$title.'</a></li>';
+		$this->links .= '<li><a href="?pageID='.$id.'">'.$title.'</a></li>';
 	}
 }
 
@@ -21,7 +23,7 @@ while($categoriesResult = $categoriesQuery->fetch_object()){
 		$menuReady .= '<ul class="layer2">';
 		$pagesQuery = $db->query("SELECT * FROM ".$db_prefix."Pages WHERE Category = '".$categoriesResult->ID."'");
 		while($pagesResult = $pagesQuery->fetch_object()){
-			$cat->addLink($pagesResult->ID, $pagesResult->url, $pagesResult->Titel);
+			$cat->addLink($pagesResult->ID, $pagesResult->im_Blog, $pagesResult->Titel);
 		}
 		$menuReady .= $cat->links;
 		$menuReady .= '</ul>';
