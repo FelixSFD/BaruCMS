@@ -1,9 +1,12 @@
 <?xml version='1.0'?>
 <moduleconfig>
 	<info>
-		<name>Inhalte</name>
+		<name>
+			<de-DE>Inhalte</de-DE>
+			<en-US>Contents</en-US>
+		</name>
 		<author>Felix Deil</author>
-		<version>0.4.2</version>
+		<version>0.5</version>
 	</info>
 	<config>
 		<display>default</display>

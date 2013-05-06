@@ -7,11 +7,10 @@ if(!$pageURL){
 	$pageURL = "not-ready";
 }
 
-mysql_query("INSERT INTO `".$db_prefix."Pages` VALUES ('', '".$_POST["title"]."', '".htmlentities($_POST["inhalt"])."', '".$userinfo["ID"]."', '".$pageURL."', '".$_POST["blog"]."', '".$_POST["category"]."','".$newTimestamp."')", $mysql);
-
-if(!mysql_error()){
+$pageAdd = new baruSQL("INSERT INTO `".$db_prefix."Pages` VALUES ('', '".$_POST["title"]."', '".htmlentities($_POST["inhalt"])."', '".$userinfo["ID"]."', '".$pageURL."', '".$_POST["blog"]."', '".$_POST["category"]."','".$newTimestamp."')");
+if($pageAdd->execute()){
 	echo "success";
 } else {
-	echo mysql_error();
+	echo $pageAdd->sqlError();
 }
 ?>

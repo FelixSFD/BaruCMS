@@ -103,31 +103,23 @@ function statusReset(){
 <h2 id="section-general">Allgemein <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
 <table border="0">
 	<tbody valign="top">
-		<!-- disabled at the moment
 		<tr>
 			<td class="tdFirst">Systemsprache:</td>
 			<td>
 				<select id="chooseLang" name="language">
 					<?php
-					$verzeichnis = $rootPath."/languages/";
-					$langs = scandir($verzeichnis);
-					foreach($langs as $l) {
-					if($l != "." && $l != ".." && substr($l, -4) == ".php"){
-						if(getSetting("LANGUAGE") == substr($l, 0, -4)){
-							?>
-							<option value="<?php echo substr($l, 0, -4); ?>" selected><?php echo substr($l, 0, -4); ?></option>
-							<?php
+					$languages = simplexml_load_file($rootPath."/languages/languages.xml");
+					foreach($languages->language as $lang){
+						if($lang->code == $language){
+							echo '<option value="'.$lang->code .'" selected>'.$lang->name .'</option>';
 						} else {
-							?>
-							<option value="<?php echo substr($l, 0, -4); ?>"><?php echo substr($l, 0, -4); ?></option>
-							<?php
+							echo '<option value="'.$lang->code .'">'.$lang->name .'</option>';
 						}
 					}
-					};
 					?>
 				</select>
 			</td>
-		</tr>-->
+		</tr>
 		<tr>
 			<td class="tdFirst">Seitentitel:</td>
 			<td><input type="text" id="pagetitleInput" name="titel" size="70" value="<? echo getSetting("PAGE_TITLE"); ?>" placeholder="<? echo $lang_adminbereichAllgemeinInputTitle; ?>"></td>

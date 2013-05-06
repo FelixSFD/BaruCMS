@@ -1,7 +1,10 @@
 <?php
 include "../../../adminAPI.php";
-mysql_query("DELETE FROM `".$db_prefix."Categories` WHERE ID = ".$_POST["id"], $mysql);
-if(!mysql_error()){
+
+$categoryDelete = new baruSQL("DELETE FROM `".$db_prefix."Categories` WHERE ID = ".$_POST["id"]);
+if($categoryDelete->execute()){
 	echo "success";
+} else {
+	echo $categoryDelete->sqlError();
 }
 ?>

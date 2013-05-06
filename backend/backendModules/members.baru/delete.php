@@ -1,7 +1,9 @@
 <?php
 include "../../../adminAPI.php";
-mysql_query("DELETE FROM `".$db_prefix."User` WHERE ID = ".$_POST["id"], $mysql);
-if(!mysql_error()){
+$groupAdd = new baruSQL("DELETE FROM `".$db_prefix."User` WHERE ID = ".$_POST["id"]);
+if($groupAdd->execute()){
 	echo "success";
+} else {
+	echo $groupAdd->sqlError();
 }
 ?>

@@ -21,7 +21,7 @@ class View
 		include "templates/".$this->template ."/".$this->pageType .".php";
 		$result = ob_get_contents();
 		ob_end_clean();
-		return $result;
+		return html_entity_decode($result);
 	}
 }
 ?>

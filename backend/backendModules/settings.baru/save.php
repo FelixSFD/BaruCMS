@@ -1,17 +1,17 @@
 <?php
 include "../../../adminAPI.php";
 if($_POST["title"]){
-	/*if(setSetting("LANGUAGE", $_POST["language"])){
+	if(setSetting("LANGUAGE", $_POST["language"])){
 		#echo "Language saved!";
 	} else {
 		$error = 1;
-	}*/
-	if(setSetting("HELLO_TEXT", $_POST["helloText"])){
+	}
+	if(setSetting("HELLO_TEXT", htmlentities($_POST["helloText"]))){
 		#echo "HELLO_TEXT saved!";
 	} else {
 		$error = 2;
 	}
-	if(setSetting("PAGE_TITLE", $_POST["title"])){
+	if(setSetting("PAGE_TITLE", strip_Tags($_POST["title"]))){
 		#echo "Pagetitle saved!";
 	} else {
 		$error = 3;

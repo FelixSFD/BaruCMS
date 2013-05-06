@@ -114,7 +114,8 @@ function saveNew(){
 			if(response == "success"){
 				ajaxStatus.html("Gespeichert!");
 				$("#baruEditor").html("<center>Kein Benutzer ausgew&auml;hlt!</center>");
-				setTimeout(statusReset, 2500);
+				//setTimeout(statusReset, 2500);
+				alert("BUG: Das Passwort wird beim erstellen falsch verschlüsselt. Bitte vergebe ein neues, indem du den Benutzer bearbeitest!");
 				loadList();
 			} else {
 				var errorMsg = "Ein unbekannter Fehler ist aufgetreten!";

@@ -79,7 +79,7 @@ function reloadTinyMCE(){
 		theme : "advanced",
 		editor_selector : "mceAdvanced",
 		plugins : "jbimages,autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
-		language: "<? echo strtolower(getSetting("LANGUAGE")); ?>",
+		language: "<?php echo substr(strtolower(getSetting("LANGUAGE")), 0, 2); ?>",
 		// Theme options
 		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
 		theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,anchor,image,code,|,forecolor,backcolor",

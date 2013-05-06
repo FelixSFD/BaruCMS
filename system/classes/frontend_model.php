@@ -15,23 +15,21 @@ class Model
 	
 	private function setTemplate()
 	{
-		include "db_config.php";
-		include "system/mysqli_connect.php";
-		$templateQuery = $db->query("SELECT * FROM ".$db_prefix."Settings WHERE Name = 'TEMPLATE'");
-		$templateResult = $templateQuery->fetch_object();
-		$this->template = $templateResult->Value;
+		include "adminAPI.php";
+		$template = new baruSQL("SELECT * FROM ".$db_prefix."Settings WHERE Name = 'TEMPLATE'");
+		$templateArray = $template->returnData("array");
+		$this->template = $templateArray[0]["Value"];
 	}
 	
 	public function loadSettings()
 	{
-		include "db_config.php";
-		include "system/mysqli_connect.php";
-		$settingsQuery = $db->query("SELECT * FROM ".$db_prefix."Settings");
-		while($settingsResult = $settingsQuery->fetch_object()){
-			$setting[$settingsResult->Name] = $settingsResult->Value;
+		include "adminAPI.php";
+		$settings = new baruSQL("SELECT * FROM ".$db_prefix."Settings");
+		foreach($settings->returnData("array") as $setting){
+			$settingArray[$setting["Name"]] = $setting["Value"];
 		}
-		$this->settings = $setting;
-		return $setting;
+		$this->settings = $settingArray;
+		return $this->settings;
 	}
 	
 	public function getHeaderIncludes()
@@ -54,10 +52,9 @@ class Model
 	
 	public function getBlogEntries()
 	{
-		include "db_config.php";
-		include "system/mysqli_connect.php";
-		$pagesQuery = $db->query("SELECT * FROM ".$db_prefix."Pages WHERE `im_Blog` = '1'");
-		while($pagesResult = $pagesQuery->fetch_object()){
+		include "adminAPI.php";
+		$pages = new baruSQL("SELECT * FROM ".$db_prefix."Pages WHERE `im_Blog` = '1'");
+		foreach($pages->returnData("object") as $pagesResult){
 			$entry[$pagesResult->ID]["Titel"] = $pagesResult->Titel;
 			$entry[$pagesResult->ID]["Autor"] = $pagesResult->Autor;
 			$entry[$pagesResult->ID]["Inhalt"] = $pagesResult->Inhalt;
@@ -72,29 +69,26 @@ class Model
 	
 	public function getPage($id)
 	{
-		include "db_config.php";
-		include "system/mysqli_connect.php";
-		$pagesQuery = $db->query("SELECT * FROM ".$db_prefix."Pages WHERE ID = '".$id."'");
-		$pagesResult = $pagesQuery->fetch_array();
-		return $pagesResult;
+		include "adminAPI.php";
+		$page = new baruSQL("SELECT * FROM ".$db_prefix."Pages WHERE ID = '".$id."'");
+		$pagesResult = $page->returnData("array");
+		return $pagesResult[0];
 	}
 	
 	public function getUser($id)
 	{
-		include "db_config.php";
-		include "system/mysqli_connect.php";
-		$userQuery = $db->query("SELECT * FROM ".$db_prefix."User WHERE ID = '".$id."'");
-		$userResult = $userQuery->fetch_array();
-		return $userResult;
+		include "adminAPI.php";
+		$user = new baruSQL("SELECT * FROM ".$db_prefix."User WHERE ID = '".$id."'");
+		$userResult = $user->returnData("array");
+		return $userResult[0];
 	}
 	
 	public function getCategory($id)
 	{
-		include "db_config.php";
-		include "system/mysqli_connect.php";
-		$catQuery = $db->query("SELECT * FROM ".$db_prefix."Categories WHERE ID = '".$id."'");
-		$catResult = $catQuery->fetch_array();
-		return $catResult;
+		include "adminAPI.php";
+		$category = new baruSQL("SELECT * FROM ".$db_prefix."Categories WHERE ID = '".$id."'");
+		$carResult = $category->returnData("array");
+		return $catResult[0];
 	}
 }
 ?>

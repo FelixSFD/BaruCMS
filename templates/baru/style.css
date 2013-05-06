@@ -9,29 +9,35 @@ html{
 }
 
 /* Menu-styles */
-#menu ul, #menu li{
+#menu{
+	width: 19%;
+	margin-top: 20px;
+	position: absolute;
+	left: 10px;
+	z-index: 2;
+}
+
+ul li ul .ui-menu-item{
+	width: 200!important;
+	font-size: 10pt;
+}
+/*#menu ul, #menu li{
 	list-style-type:none;
 	text-decoration: none;
 }
 
-#menu{
-	width: 19%;
-	position: absolute;
-	left: 10px;
-	margin-left: -39px;
-}
 #menu a{
 	color: black;
 	text-decoration: none;
-}
-
+}*/
+/*
 #main-menu ul li{
 	font-size: 9pt;
 }
 
 #main-menu a:hover{
 	text-decoration: underline;
-}
+}*/
 
 /* Startpage */
 .pagePreview{ /* Article-previews list */
@@ -48,6 +54,7 @@ html{
 
 .vorschau h3{
 	line-height: 0.2;
+	cursor: pointer;
 }
 
 .vorschau .date{

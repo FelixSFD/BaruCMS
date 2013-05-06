@@ -44,6 +44,6 @@ jQuery.fn.baruMenu = function(){ // THIS LINE MUST  NOT BE CHANGED!
 
 $(document).ready(function() { 
 	$('#socialshareprivacy').socialSharePrivacy();
-	$('#main-menu').baruMenu();
+	$('#main-menu').menu();
 });
 </script>

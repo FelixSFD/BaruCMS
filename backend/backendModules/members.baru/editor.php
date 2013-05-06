@@ -1,10 +1,13 @@
 <?php
 include "../../../adminAPI.php";
-$user = mysql_query("SELECT * FROM ".$db_prefix."User WHERE ID = '".$_GET["userID"]."'", $mysql);
+/*$user = mysql_query("SELECT * FROM ".$db_prefix."User WHERE ID = '".$_GET["userID"]."'", $mysql);
 if(mysql_error()){
 	fehler(mysql_error());
 }
-$u = mysql_fetch_array($user);
+$u = mysql_fetch_array($user);*/
+$user = new baruSQL("SELECT * FROM ".$db_prefix."User WHERE ID = '".$_GET["userID"]."'");
+$u1 = $user->returnData("array");
+$u = $u1[0];
 ?>
 <table>
 	<tr>
@@ -29,9 +32,21 @@ $u = mysql_fetch_array($user);
 		<td>
 		<select id="group">
 			<?php
-			$groups = mysql_query("SELECT * FROM ".$db_prefix."Groups", $mysql);
+			/*$groups = mysql_query("SELECT * FROM ".$db_prefix."Groups", $mysql);
 			echo mysql_error();
 			while ($g = mysql_fetch_array($groups)) {
+				if($g["ID"] == $u["Group"]){
+					?>
+					<option value="<?php echo $g["ID"]; ?>" selected><?php echo $g["Name"]; ?></option>
+					<?php
+				} else {
+					?>
+					<option value="<?php echo $g["ID"]; ?>"><?php echo $g["Name"]; ?></option>
+					<?php
+				}
+			}*/
+			$groups = new baruSQL("SELECT * FROM ".$db_prefix."Groups");
+			foreach($groups->returnData("array") as $g){
 				if($g["ID"] == $u["Group"]){
 					?>
 					<option value="<?php echo $g["ID"]; ?>" selected><?php echo $g["Name"]; ?></option>

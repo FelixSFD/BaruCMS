@@ -1,7 +1,10 @@
 <?php
 include "../../../adminAPI.php";
-$groupsQuery = $db->query("SELECT * FROM ".$db_prefix."Groups WHERE ID = '".$_GET["groupID"]."'");
-$groupsResult = $groupsQuery->fetch_object();
+/*$groupsQuery = $db->query("SELECT * FROM ".$db_prefix."Groups WHERE ID = '".$_GET["groupID"]."'");
+$groupsResult = $groupsQuery->fetch_object();*/
+
+$groups = new baruSQL("SELECT * FROM ".$db_prefix."Groups WHERE ID = '".$_GET["groupID"]."'");
+$groupsResult = $groups->returnData("array");
 
 $allRights = array("EDIT_USER", 
 	"EDIT_USERGROUPS",
@@ -22,17 +25,11 @@ class rightsTable
 	public $groupID;
 	public $db;
 	private function getStatus($code){
-		include "../../../db_config.php";
-		include "../../../system/mysqli_connect.php";
-		$rightsQuery = $this->db->query("SELECT * FROM ".$db_prefix."Rights WHERE GroupID = '".$this->groupID."' AND Name = '".$code."'");
-		$rightsResult = $rightsQuery->fetch_object();
-		return $rightsResult->Name;
-		/*$rights = mysql_query("SELECT * FROM ".$db_prefix."Rights WHERE GroupID = '".$this->groupID."' AND Name = '".$code."'", $mysql);
-		if($r = mysql_fetch_array($rights)){
-			return true;
-		} else {
-			return false;
-		}*/
+		global $rootPath;
+		include $rootPath."/db_config.php";
+		$rights = new baruSQL("SELECT * FROM ".$db_prefix."Rights WHERE GroupID = '".$this->groupID."' AND Name = '".$code."'");
+		$rightsResult = $rights->returnData("array");
+		return $rightsResult[0]["Name"];
 	}
 	public function writeTableLine($code, $name){
 		$this->result .= '<tr>';
@@ -53,7 +50,7 @@ class rightsTable
 <table>
 	<tr>
 		<td><label for="groupname">Gruppenbezeichnung:</label></td>
-		<td><input type="text" id="groupname" value="<?php echo $groupsResult->Name; ?>"></td>
+		<td><input type="text" id="groupname" value="<?php echo $groupsResult[0]["Name"]; ?>"></td>
 	</tr>
 	<?php
 	$rightsTable = new rightsTable;

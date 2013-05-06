@@ -1,9 +1,10 @@
 <?php
 include "../../../adminAPI.php";
 
-mysql_query("INSERT INTO `".$db_prefix."Groups` VALUES ('', '".$_POST["name"]."')", $mysql);
-
-if(!mysql_error()){
+$groupAdd = new baruSQL("INSERT INTO `".$db_prefix."Groups` VALUES ('', '".$_POST["name"]."')");
+if($groupAdd->execute()){
 	echo "success";
+} else {
+	echo $groupAdd->sqlError();
 }
 ?>

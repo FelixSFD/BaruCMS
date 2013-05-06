@@ -30,10 +30,9 @@ include $rootPath."/adminAPI.php";
 	<link rel="shortcut icon" href="./src/img/favicon.ico" />
 	<meta name="viewport" content="width=1000, maximum-scale=1.0">
 	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:300,400' rel='stylesheet' type='text/css'>
-	<link href='http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css' rel='stylesheet' type='text/css'>
-	<!--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
+	<link href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet' type='text/css'>
 	<script src="http://code.jquery.com/jquery-2.0.0.js"></script>
-	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	<script type="text/javascript" src="../system/jQuery/plugins/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
 	<script src="./src/js/dropdown.js"></script>
 	<script type="text/javascript">
@@ -46,7 +45,7 @@ include $rootPath."/adminAPI.php";
 				theme : "advanced",
 				editor_selector : "mceAdvanced",
 				plugins : "jbimages,autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
-				language: "<? echo strtolower(getSetting("LANGUAGE")); ?>",
+				language: "<?php echo substr(strtolower(getSetting("LANGUAGE")), 0, 2); ?>",
 				// Theme options
 				theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
 				theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
@@ -268,9 +267,8 @@ include $rootPath."/adminAPI.php";
 										$moduleConfigXML = simplexml_load_file($moduleConfigPath);
 									}
 									if(substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php") && $moduleConfigXML->config->display == "dropdown"){
-										$info = file($rootPath."/backend/backendModules/".$t."/info_".getSetting("LANGUAGE").".txt");
 										?>
-										<li onclick="location.href='?module=<?php echo substr($t, 0, -5); ?>'"><img height="16px" alt=" " src="./src/img/icons/<?php echo $moduleConfigXML->config->icon; ?>" /><?php echo $moduleConfigXML->info->name; ?></li>
+										<li onclick="location.href='?module=<?php echo substr($t, 0, -5); ?>'"><img height="16px" alt=" " src="./src/img/icons/<?php echo $moduleConfigXML->config->icon; ?>" /><?php echo $moduleConfigXML->info->name->$language; ?></li>
 										<?php
 									}
 								};
@@ -282,7 +280,7 @@ include $rootPath."/adminAPI.php";
 						<?php
 						}
 						?>
-						<li><a href="../index.php">Frontend</a></li>
+						<li><a href="../index.php" target="_BLANK">Frontend</a></li>
 					</ul>
 				</div>
 		</div>
@@ -306,10 +304,9 @@ include $rootPath."/adminAPI.php";
 							$moduleConfigXML = simplexml_load_file($moduleConfigPath);
 						}
 						if($t != "." && $t != ".." && $t != "readme.txt" && substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php") && $moduleConfigXML->config->display == "default"){
-							$info = file($rootPath."/backend/backendModules/".$t."/info_".getSetting("LANGUAGE").".txt");
 							echo '<div class="menuDivider"></div>';
 							?>
-							<li class="menuColor<?php echo $menuColors[$anzahl]." ".ActiveMenu($t); ?>" onclick="location.href='backend.php?module=<?php echo substr($t, 0, -5); ?>'"><?php echo $info[0]; ?></li>
+							<li class="menuColor<?php echo $menuColors[$anzahl]." ".ActiveMenu($t); ?>" onclick="location.href='backend.php?module=<?php echo substr($t, 0, -5); ?>'"><?php echo $moduleConfigXML->info->name->$language; ?></li>
 							<?php
 							if(ActiveMenu($t)){
 								?>
@@ -379,7 +376,7 @@ include $rootPath."/adminAPI.php";
 		$currentModuleConfigPath = $rootPath."/backend/backendModules/".$module.".baru/config.xml";
 		$currentModuleConfigXML = simplexml_load_file($currentModuleConfigPath);
 		if($currentModuleConfigXML->config->show_footer){
-			echo "Modul <i>".$currentModuleConfigXML->info->name ."</i> (Version: ".$currentModuleConfigXML->info->version .") &copy; <i>".$currentModuleConfigXML->info->author ."</i>";
+			echo "Modul <i>".$currentModuleConfigXML->info->name->$language ."</i> (Version: ".$currentModuleConfigXML->info->version .") &copy; <i>".$currentModuleConfigXML->info->author ."</i>";
 		}
 		?>
 		 - 

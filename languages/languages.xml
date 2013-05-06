@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<languages>
+	<!--<language>
+		<code>de-BY</code>
+		<name>Deutsch (Bayern)</name>
+	</language>-->
+	<language>
+		<code>de-DE</code>
+		<name>Deutsch (Deutschland)</name>
+	</language>
+	<language>
+		<code>en-US</code>
+		<name>English (United States)</name>
+	</language>
+</languages>
