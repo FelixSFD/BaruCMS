@@ -26,6 +26,8 @@ The installer will add the following user:
 __CHANGE YOUR PASSWORD AND E-MAIL, AFTER INSTALLING!__
 
 # Changelog
+## Version 0.6
+* many different changes
 ## Version 0.5
 * only uses MySQLi, if the server supports it
 * XXS-exploits fixed
