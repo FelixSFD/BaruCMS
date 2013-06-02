@@ -50,6 +50,14 @@ if($_POST["searchToggle"]){
 	echo getSetting("SEARCH_ACTIVE");
 }
 
+if($_POST["searchMinLength"]){
+	if(setSetting("SEARCH_MIN_LENGTH", $_POST["searchMinLength"])){
+		echo "success";
+	}
+}
+
+
+
 if($_POST["template"]){
 	if(setSetting("TEMPLATE", $_POST["template"])){
 		echo "success";

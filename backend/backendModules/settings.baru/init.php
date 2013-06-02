@@ -2,22 +2,22 @@
 if(getRights("UPDATE_SETTINGS", $userinfo["Group"])){
 ?>
 <div class="contentHead">
-	<h1>Einstellungen</h1>
+	<h1><?php echo $currentModuleConfigXML->info->name->$language; ?></h1>
 	<h3>
-		<a href="#section-general">Allgemein &raquo;</a>
+		<a href="#section-general"><?php echo $l->general; ?> &raquo;</a>
 		<br>
-		<a href="#section-design">Design &raquo;</a>
+		<a href="#section-design"><?php echo $l->design; ?> &raquo;</a>
 		<br>
-		<a href="#section-search">Suche &raquo;</a>
+		<a href="#section-search"><?php echo $l->search; ?> &raquo;</a>
 		<br>
-		<a href="#section-maintenance">Wartungsmodus &raquo;</a>
+		<a href="#section-maintenance"><?php echo $l->maintenanceMode; ?> &raquo;</a>
 	</h3>
 </div>
 <script>
 //Allgemein
 function save(){
 	var ajaxStatus = $("#ajaxStatus");
-	ajaxStatus.html("Speichern...");
+	ajaxStatus.html("<?php echo $l->saving; ?>...");
 	var ed = tinyMCE.get('helloTextTextarea');
 	var content = ed.getContent();
 	var form_data = {
@@ -61,7 +61,7 @@ function statusReset2(){
 //Wartungsmodus
 function save2(){
 	var ajaxStatus = $("#ajaxStatus2");
-	ajaxStatus.html("Speichern...");
+	ajaxStatus.html("<?php echo $l->saving; ?>...");
 	var form_data = {
 		wartungsmodus: 1,
 		is_ajax: 1
@@ -100,11 +100,11 @@ function statusReset(){
 	ajaxStatus.html("");
 }
 </script>
-<h2 id="section-general">Allgemein <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
+<h2 id="section-general"><?php echo $l->general; ?> <small class="link-top"><a href="#top">&#8593; <?php echo $l->toTop; ?> &#8593;</a></small></h2>
 <table border="0">
 	<tbody valign="top">
 		<tr>
-			<td class="tdFirst">Systemsprache:</td>
+			<td class="tdFirst"><?php echo $l->systemLanguage; ?>:</td>
 			<td>
 				<select id="chooseLang" name="language">
 					<?php
@@ -121,26 +121,26 @@ function statusReset(){
 			</td>
 		</tr>
 		<tr>
-			<td class="tdFirst">Seitentitel:</td>
+			<td class="tdFirst"><?php echo $l->pageTitle; ?>:</td>
 			<td><input type="text" id="pagetitleInput" name="titel" size="70" value="<? echo getSetting("PAGE_TITLE"); ?>" placeholder="<? echo $lang_adminbereichAllgemeinInputTitle; ?>"></td>
 		</tr>
 		<tr>
-			<td class="tdFirst">Willkommensmeldung:</td>
+			<td class="tdFirst"><?php echo $l->welcome; ?>:</td>
 			<td>
 				<textarea id="helloTextTextarea" name="helloText" class="advancedEditor" rows="20" cols="90"><? echo getSetting("HELLO_TEXT"); ?></textarea>			
 			</td>
 		</tr>
 		<tr>
 			<td class="tdFirst"></td>
-			<td><button onclick="save()" class="ui-state-default ui-corner-all">Speichern</button><span id="ajaxStatus"></span></td>
+			<td><button onclick="save()" class="ui-state-default ui-corner-all"><?php echo $l->save; ?></button><span id="ajaxStatus"></span></td>
 		</tr>
 	</tbody>
 </table>
-<h2 id="section-design">Design <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
+<h2 id="section-design"><?php echo $l->design; ?> <small class="link-top"><a href="#top">&#8593; <?php echo $l->toTop; ?> &#8593;</a></small></h2>
 <script>
 function saveTemplate(){
 	var ajaxStatus = $("#ajaxStatus3");
-	ajaxStatus.html("Speichern...");
+	ajaxStatus.html("<?php echo $l->saving; ?>...");
 	var form_data = {
 		template: $("#templateChooser").val(),
 		is_ajax: 1
@@ -171,14 +171,14 @@ function statusReset3(){
 </script>
 <table>
 	<tbody valign="top">
-		<tr>
+		<!--<tr>
 			<td class="tdFirst">Hintergrund:</td>
 			<td>
 				<button onclick="uploadBg()" class="ui-state-default ui-corner-all" disabled>&auml;ndern</button>
 			</td>
-		</tr>
+		</tr>-->
 		<tr>
-			<td class="tdFirst">Template:</td>
+			<td class="tdFirst"><?php echo $l->template; ?>:</td>
 			<td>
 				<select id="templateChooser">
 				<?php
@@ -197,16 +197,16 @@ function statusReset3(){
 				};
 				?>
 				</select>
-				<button onclick="saveTemplate()" class="ui-state-default ui-corner-all">Speichern</button><span id="ajaxStatus3"></span>
+				<button onclick="saveTemplate()" class="ui-state-default ui-corner-all"><?php echo $l->save; ?></button><span id="ajaxStatus3"></span>
 			</td>
 		</tr>
 	</tbody>
 </table>
-<h2 id="section-search">Suche <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
+<h2 id="section-search"><?php echo $l->search; ?> <small class="link-top"><a href="#top">&#8593; <?php echo $l->toTop; ?> &#8593;</a></small></h2>
 <script>
 function save4(){
 	var ajaxStatus = $("#ajaxStatus4");
-	ajaxStatus.html("Speichern...");
+	ajaxStatus.html("<?php echo $l->saving; ?>...");
 	var form_data = {
 		searchToggle: 1,
 		is_ajax: 1
@@ -244,11 +244,46 @@ function statusReset4(){
 	var ajaxStatus = $("#ajaxStatus4");
 	ajaxStatus.html("");
 }
+
+function save5(){
+	var ajaxStatus = $("#ajaxStatus5");
+	ajaxStatus.html("<?php echo $l->saving; ?>...");
+	var form_data = {
+		searchMinLength: $("#searchMinLength").val(),
+		is_ajax: 1
+	};
+	
+	jQuery.ajax({
+		type: "POST",
+		url: "backendModules/settings.baru/save.php",
+		data: form_data,
+		success: function(response)
+		{
+			if(response == "success"){
+				ajaxStatus.html("Gespeichert!");
+				setTimeout(statusReset5, 2500);
+			} else {
+				if(response == 4){
+					var errorMsg = "Einstellungen wurden nicht geändert!";
+				} else {
+					var errorMsg = "Ein unbekannter Fehler ist aufgetreten!";
+				}
+				ajaxStatus.html(errorMsg);
+			}
+		}
+	});
+	return false;
+}
+
+function statusReset5(){
+	var ajaxStatus = $("#ajaxStatus5");
+	ajaxStatus.html("");
+}
 </script>
 <table>
 	<tbody valign="top">
 		<tr>
-			<td class="tdFirst">Suchfunktion aktivieren:</td>
+			<td class="tdFirst"><?php echo $l->activateSearch; ?>:</td>
 			<td>
 				<?
 				if(getSetting("SEARCH_ACTIVE") == "1"){
@@ -263,25 +298,25 @@ function statusReset4(){
 				?>
 			</td>
 		</tr>
-		<tr>
+		<!--<tr>
 			<td class="tdFirst">Mindestl&auml;nge des Suchbegriffs:</td>
 			<td>
-				<input type="number" id="searchMinLength" size="2" value="<?php echo getSetting("SEARCH_MIN_LENGTH"); ?>" disabled>
+				<input type="number" id="searchMinLength" size="2" value="<?php echo getSetting("SEARCH_MIN_LENGTH"); ?>">
 			</td>
 		</tr>
 		<tr>
 			<td class="tdFirst"></td>
 			<td>
-				<button onclick="save5()" class="ui-state-default ui-corner-all" disabled>Speichern</button><span id="ajaxStatus5"></span>
+				<button onclick="save5()" class="ui-state-default ui-corner-all"><?php echo $l->save; ?></button><span id="ajaxStatus5"></span>
 			</td>
-		</tr>
+		</tr>-->
 	</tbody>
 </table>
-<h2 id="section-maintenance">Wartungsmodus <small class="link-top"><a href="#top">&#8593; top &#8593;</a></small></h2>
+<h2 id="section-maintenance"><?php echo $l->maintenanceMode; ?> <small class="link-top"><a href="#top">&#8593; <?php echo $l->toTop; ?> &#8593;</a></small></h2>
 <table>
 	<tbody valign="top">
 		<tr>
-			<td class="tdFirst">Wartungsmodus:</td>
+			<td class="tdFirst"><?php echo $l->maintenanceMode; ?>:</td>
 			<td>
 				<?
 				if(getSetting("WARTUNG") == "1"){

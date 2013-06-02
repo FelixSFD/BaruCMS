@@ -4,9 +4,9 @@ class menuCategory
 {
 	public $name;
 	public $links;
-	public function addLink($id, $type, $title)
+	public function addLink($id, $category, $type, $title)
 	{
-		$this->links .= '<li><a href="?pageID='.$id.'">'.$title.'</a></li>';
+		$this->links .= '<li><a href="?category='.$category.'&pageID='.$id.'">'.$title.'</a></li>';
 	}
 }
 
@@ -18,11 +18,11 @@ foreach($categories->returnData("array") as $categoriesResult){
 		$cat = new menuCategory;
 		$cat->name = $categoriesResult["Name"];
 		$menuReady .= '<li data-status="closed" data-id="'.$categoriesResult["ID"].'" class="layer1 closed">';
-		$menuReady .= '<a href="javascript:void(0);">'.$categoriesResult["Name"].'</a>';
+		$menuReady .= '<a href="?category='.$categoriesResult["ID"].'">'.$categoriesResult["Name"].'</a>';
 		$menuReady .= '<ul class="layer2">';
 		$pagesM = new baruSQL("SELECT * FROM ".$db_prefix."Pages WHERE Category = '".$categoriesResult["ID"]."'");
 		foreach($pagesM->returnData("array") as $pagesMresult){
-			$cat->addLink($pagesMresult["ID"], $pagesMresult["im_Blog"], $pagesMresult["Titel"]);
+			$cat->addLink($pagesMresult["ID"], $pagesMresult["Category"], $pagesMresult["im_Blog"], $pagesMresult["Titel"]);
 		}
 		$menuReady .= $cat->links;
 		$menuReady .= '</ul>';

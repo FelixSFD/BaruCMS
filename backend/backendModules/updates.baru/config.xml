@@ -2,8 +2,8 @@
 <moduleconfig>
 	<info>
 		<name>
-			<de-DE>Updates</de-DE>
-			<en-US>Updates</en-US>
+			<de_DE>Updates</de_DE>
+			<en_US>Updates</en_US>
 		</name>
 		<author>Felix Deil</author>
 		<version>0.3</version>

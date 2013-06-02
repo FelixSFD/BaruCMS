@@ -53,17 +53,22 @@ class Model
 	public function getBlogEntries()
 	{
 		include "adminAPI.php";
+		$pagesInCategory = array();
 		$pages = new baruSQL("SELECT * FROM ".$db_prefix."Pages WHERE `im_Blog` = '1'");
 		foreach($pages->returnData("object") as $pagesResult){
 			$entry[$pagesResult->ID]["Titel"] = $pagesResult->Titel;
 			$entry[$pagesResult->ID]["Autor"] = $pagesResult->Autor;
 			$entry[$pagesResult->ID]["Inhalt"] = $pagesResult->Inhalt;
 			$entry[$pagesResult->ID]["ID"] = $pagesResult->ID;
+			$entry[$pagesResult->ID]["Category"] = $pagesResult->Category;
+			
+			$pagesInCategory[$pagesResult->Category]++;
 			
 			include_once "system/classes/baruDate.class.php";
 			$date = new baruDate($pagesResult->Datum);
 			$entry[$pagesResult->ID]["Datum"] = $date->returnDate();
 		}
+		$entry["pagesInCategory"] = $pagesInCategory;
 		return $entry;
 	}
 	
@@ -87,8 +92,65 @@ class Model
 	{
 		include "adminAPI.php";
 		$category = new baruSQL("SELECT * FROM ".$db_prefix."Categories WHERE ID = '".$id."'");
-		$carResult = $category->returnData("array");
+		$catResult = $category->returnData("array");
 		return $catResult[0];
+	}
+	
+	public function userCanView($type, $id){
+		require "adminAPI.php";
+
+		switch($type){
+			case "category": //CATEGORY
+				$category = $this->getCategory($id);
+
+				if($baru["login_ok"] || $category["visibility"] == "public" || $category["visibility"] == "hidden"){
+					$canViewResult = true;
+				} else if($category["visibility"] == "private"){
+					if($baru["login_ok"]){
+						$canViewResult = true;
+					} else {
+						$canViewResult = false;
+						return false;
+					}
+				} else {
+					$canViewResult = false;
+				}
+				break;
+			case "entry": //ENTRY
+				$page = $this->getPage($id);
+
+				if($baru["login_ok"] || $page["im_Blog"] == "1"){
+					$canViewResult = true;
+				} else if($page["im_Blog"] == "0"){
+					if($baru["login_ok"]){
+						$canViewResult = true;
+					} else {
+						$canViewResult = false;
+					}
+				} else {
+					$canViewResult = false;
+				}
+				break;
+			case "page": //PAGE
+				$page = $this->getPage($id);
+
+				if($baru["login_ok"] || $page["im_Blog"] == "1"){
+					$canViewResult = true;
+				} else if($page["im_Blog"] == "0"){
+					if($baru["login_ok"]){
+						$canViewResult = true;
+					} else {
+						$canViewResult = false;
+					}
+				} else {
+					$canViewResult = false;
+				}
+				break;
+			case "default":
+				$canViewResult = true;
+				break;
+		}
+		return $canViewResult;
 	}
 }
 ?>

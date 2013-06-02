@@ -2,42 +2,24 @@
 if(getRights("VIEW_SYSTEM_INFO", $userinfo["Group"])){
 ?>
 <div class="contentHead">
-	<h1>Systeminformationen</h1>
+	<h1><?php echo $currentModuleConfigXML->info->name->$language; ?></h1>
 </div>
-<h2>Serverinformationen</h2>
+<h2><?php echo $l->serverInformation; ?></h2>
 <table>
 	<tbody valign="top">
 		<tr>
-			<td class="tdFirst">Host:</td>
+			<td class="tdFirst"><?php echo $l->host; ?>:</td>
 			<td><?php echo $_SERVER["SERVER_NAME"]; ?></td>
 		</tr>
 		<tr>
-			<td class="tdFirst">Server-Admin:</td>
+			<td class="tdFirst"><?php echo $l->serverAdmin; ?>:</td>
 			<td><?php echo $_SERVER["SERVER_ADMIN"]; ?></td>
 		</tr>
 		<tr>
-			<td class="tdFirst">PHP-Version:</td>
-			<td><?php echo phpversion(); ?></td>
-		</tr>
-		<tr>
-			<td class="tdFirst">MySQL-Version:</td>
+			<td class="tdFirst">PHP:</td>
 			<td>
+				Version <?php echo phpversion(); ?><br>
 				<?php
-				if(extension_loaded('mysqli')){
-					echo mysql_get_server_info()." (MySQLi aktiviert)";
-				} else {
-					echo mysql_get_server_info();
-					echo '<br><b style="color: red; text-decoration: blink;">MySQLi ist nicht aktiviert!</b><br>Bitte installiere/aktiviere MySQLi um die Sicherheit deiner Website zu gew&auml;hrleisten. Wende dich im Notfall an deinen Webhoster.';
-				}
-				?>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>PHP-Extensions:</b>
-			</td>
-			<td>
-				<?
 				$install_info = "<table>";
 				//file_get_contents()
 				$check_FGT = file_get_contents("http://google.de");
@@ -79,13 +61,26 @@ if(getRights("VIEW_SYSTEM_INFO", $userinfo["Group"])){
 				?>
 			</td>
 		</tr>
+		<tr>
+			<td class="tdFirst">MySQL:</td>
+			<td>
+				<?php
+				if(extension_loaded('mysqli')){
+					echo "Version ".mysql_get_server_info()." (MySQLi aktiviert)";
+				} else {
+					echo "Version ".mysql_get_server_info();
+					echo '<br><b style="color: red; text-decoration: blink;">MySQLi ist nicht aktiviert!</b><br>Bitte installiere/aktiviere MySQLi um die Sicherheit deiner Website zu gew&auml;hrleisten. Wende dich im Notfall an deinen Webhoster.';
+				}
+				?>
+			</td>
+		</tr>
 	</tbody>
 </table>
 <h2>Baru CMS</h2>
 <table>
 	<tbody>
 		<tr>
-			<td class="tdFirst">Bezeichnung:</td>
+			<td class="tdFirst"><?php echo $l->baruCMSname; ?>:</td>
 			<td><?php echo $appName; ?></td>
 		</tr>
 		<tr>
@@ -98,23 +93,23 @@ if(getRights("VIEW_SYSTEM_INFO", $userinfo["Group"])){
 		</tr>
 	</tbody>
 </table>
-<h2>Entwickler</h2>
+<h2><?php echo $l->developers; ?></h2>
 <table>
 	<tbody>
 		<tr>
-			<td class="tdFirst">Programmierung:</td>
+			<td class="tdFirst"><?php echo $l->developers; ?>:</td>
 			<td>Felix Deil</td>
 		</tr>
 		<tr>
-			<td class="tdFirst">Design:</td>
+			<td class="tdFirst"><?php echo $l->design; ?>:</td>
 			<td>
 				<a href="http://twitter.com/janh97" target="_blank">@janh97</a>, Felix Deil
 			</td>
 		</tr>
-		<!--<tr>
-			<td class="tdFirst">&Uuml;bersetzung:</td>
-			<td>Felix Deil (EN)</td>
-		</tr>-->
+		<tr>
+			<td class="tdFirst"><?php echo $l->translation; ?>:</td>
+			<td>Felix Deil (en-US)</td>
+		</tr>
 	</tbody>
 </table>
 <?php

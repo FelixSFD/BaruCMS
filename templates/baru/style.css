@@ -80,8 +80,8 @@ ul li ul .ui-menu-item{
 	position: absolute;
 	right: 10px;
 	width: 75%;
-	background: #CCC;
-	border-radius: 15px;
+	background: white !important;
+	border-radius: 5px;
 	padding: 8px 8px 8px 8px;
 }
 

@@ -57,7 +57,7 @@ if(empty($module)) {
 if(!function_exists("ModuleExists")){
 	function ModuleExists($module) {
 		global $rootPath;
-		if(file_exists($rootPath.'/backend/backendModules/'.$module.'.baru/main.css') && file_exists($rootPath.'/backend/backendModules/'.$module.'.baru/init.php')) {
+		if(file_exists($rootPath.'/backend/backendModules/'.$module.'.baru/config.xml') && file_exists($rootPath.'/backend/backendModules/'.$module.'.baru/init.php')) {
 				return true;
 			} else {
 				return false;
@@ -98,6 +98,8 @@ if(!function_exists("getSetting")){
 	}
 	
 	$language = getSetting("LANGUAGE");
+	$languageXML = simplexml_load_file($rootPath."/languages/vars.xml");
+	$l = $languageXML->$language;
 }
 
 if(!function_exists("setRights")){
@@ -212,8 +214,10 @@ function help($text){
 
 
 if($_POST["action"] == "login" && $_GET["action"] != "logout"){
-	$login_abfrage = mysql_query("SELECT * FROM ".$db_prefix."User WHERE Email = '".$_POST["email"]."'", $mysql);
-	$usrs = mysql_fetch_array($login_abfrage);
+	#$login_abfrage = mysql_query("SELECT * FROM ".$db_prefix."User WHERE Email = '".$_POST["email"]."'", $mysql);
+	#$usrs = mysql_fetch_array($login_abfrage);
+	$loginQuery = new baruSQL("SELECT * FROM ".$db_prefix."User WHERE Email = '".$_POST["email"]."'", $mysql);
+	$usrs = $loginQuery->returnData("array")[0];
 	
 	include_once $rootPath."/system/classes/baruPassword.class.php";
 	$pw = new baruPassword;
@@ -222,38 +226,34 @@ if($_POST["action"] == "login" && $_GET["action"] != "logout"){
 		$session_length = 60*60*24*7;
 		$session_expires = time()+$session_length;
 		$session_id = zufallsstring(32);
-		mysql_query("INSERT INTO `".$db_prefix."Session` VALUES ('".$usrs["ID"]."', '".$session_id."', '".$_SERVER["REMOTE_ADDR"]."','".$session_expires."')", $mysql);
-		//echo mysql_error();
+		$createSession = new BaruSQL("INSERT INTO `".$db_prefix."Session` VALUES ('".$usrs["ID"]."', '".$session_id."', '".$_SERVER["REMOTE_ADDR"]."','".$session_expires."')");
+		$createSession->execute();
 		setcookie("login_id", $session_id, time()+$session_length, "/");
 		#hinweis("Login erfolgreich!");
 		$justloggedin = true;
 		header("Location: backend.php");
 	} else if($usrs["Status"] != "1"){
 		#fehler("User nicht aktiviert!"); 
-		$loginerror = "User nicht aktiviert!";
+		$loginerror = "l001";
 	} else {
 		#fehler("Benutzername und/oder Passwort falsch!");
-		$loginerror = "Benutzername und/oder Passwort falsch!";
+		$loginerror = "l002";
 	}
 	#exit;
 }
 
 //Logincheck
-$logincheck = $db->query("SELECT * FROM ".$db_prefix."Session WHERE Session = '".$_COOKIE["login_id"]."'");
-if(mysql_error()){
-	fehler(mysql_error());
-	exit;
-}
-$lCheck = $logincheck->fetch_array();
-if($lCheck["Expires"] > time()){
-	$baru["login_ok"] = true;
-	$baru["userID"] = $lCheck["User"]; 
-	setcookie("login_id", $_COOKIE["login_id"], time()+60*60*24*7, "/");
+if($_COOKIE["login_id"]){
+	$logincheck = new baruSQL("SELECT * FROM ".$db_prefix."Session WHERE Session = '".$_COOKIE["login_id"]."'");
+	foreach($logincheck->returnData("array") as $lCheck){
+		$baru["login_ok"] = true;
+		$baru["userID"] = $lCheck["User"]; 
+		setcookie("login_id", $_COOKIE["login_id"], time()+60*60*24*7, "/");
 
-	//User-Info
-	$userinfos = $db->query("SELECT * FROM ".$db_prefix."User WHERE ID = ".$baru["userID"]);
-	echo mysql_error();
-	$userinfo = $userinfos->fetch_array();
+		//User-Info
+		$userinfos = new baruSQL("SELECT * FROM ".$db_prefix."User WHERE ID = ".$baru["userID"]);
+		$userinfo = $userinfos->returnData("array")[0];
+	}
 }
 
 

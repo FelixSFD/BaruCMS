@@ -249,13 +249,13 @@ error_reporting(E_ALL|E_STRICT);
 			</div>
 		</div>
 		<div id="bottom" align=center>
-			<button class="bBack" onclick="zurueck()" style="">Zurück...</button>
+			<button class="bBack" onClick="zurueck()" style="">Zurück...</button>
 			&nbsp;&nbsp;
-			<button class="bNext" onclick="weiter()" style="">Weiter...</button>
+			<button class="bNext" onClick="weiter()" style="">Weiter...</button>
 		</div>
 	</div>
 	<div id="footer">
-		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.2 - Baru CMS version: 0.5</small>
+		<small>&copy; Felix Deil 2012-2013 - Installer-Version: 1.0.2 - Baru CMS version: 0.6</small>
 	</div>
 </body>
 </html>

@@ -10,6 +10,7 @@ class Controller
 	private $blogEntries = array();
 	private $currentPageData = array();
 	private $currentPageDataAuthor = array();
+	private $pagesInThisCategory;
 	
 	public function __construct($request)
 	{
@@ -20,7 +21,7 @@ class Controller
 		$this->headerIncludes = $model->getHeaderIncludes();
 		$this->mainMenu = $model->getMenu();
 		$this->blogEntries = $model->getBlogEntries();
-		
+		$this->pagesInThisCategory = $this->blogEntries["pagesInCategory"][$request["category"]];
 		# pageType ermitteln
 		if($request["pageID"] && $request["view"] == "page"){
 			$this->pageType = "page";
@@ -28,6 +29,21 @@ class Controller
 		} else if($request["pageID"] && ($request["view"] == "entry" or !$request["view"])){
 			$this->pageType = "entry";
 			$loadPage = true;
+		} else if(!$request["pageID"] && $request["category"]){
+			$this->pageType = "category";
+			if($this->pagesInThisCategory == 1){
+				$this->pageType = "entry";
+				# einzigen eintrag dieser Kategorie aufrufen
+				foreach($this->blogEntries as $entry){
+					if($entry["Category"] == $request["category"]){
+						header("Location: ?category=".$request["category"]."&pageID=".$entry["ID"]);
+					}
+				}
+			}
+			$loadPage = true;
+		}
+		if(!$model->userCanView($this->pageType, $request["pageID"])){
+			$loadPage = false;
 		}
 		
 		if($loadPage){

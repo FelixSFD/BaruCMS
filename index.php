@@ -2,9 +2,9 @@
 #error_reporting(E_ALL);
 // unsere Klassen einbinden
 $start = microtime();
-include "system/classes/frontend_controller.php";
-include "system/classes/frontend_model.php";
-include "system/classes/frontend_view.php";
+require "system/classes/frontend_controller.php";
+require "system/classes/frontend_model.php";
+require "system/classes/frontend_view.php";
 
 // $_GET und $_POST zusammenfasen  
 $request = array_merge($_GET, $_POST);

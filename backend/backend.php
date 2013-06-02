@@ -14,6 +14,13 @@ if(file_exists($documentRoot.dirname($_SERVER["SCRIPT_NAME"])."/db_config.php"))
 	$rootPath = getcwd()."/..";
 }
 include $rootPath."/adminAPI.php";
+
+$currentModuleConfigPath = $rootPath."/backend/backendModules/".$module.".baru/config.xml";
+$currentModuleConfigXML = simplexml_load_file($currentModuleConfigPath);
+
+if($currentModuleConfigXML->info->name->$language){
+	$titleExtension = " - ".$currentModuleConfigXML->info->name->$language;
+}
 ?>
 <html lang="de">
 <head>
@@ -27,7 +34,7 @@ include $rootPath."/adminAPI.php";
 			echo '<style>#menu {border-bottom: 5px solid #000000;}</style>';
 		}
 	?>
-	<link rel="shortcut icon" href="./src/img/favicon.ico" />
+	<link rel="shortcut icon" href="./src/img/favicon.png" />
 	<meta name="viewport" content="width=1000, maximum-scale=1.0">
 	<link href='http://fonts.googleapis.com/css?family=Merriweather+Sans:300,400' rel='stylesheet' type='text/css'>
 	<link href='http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css' rel='stylesheet' type='text/css'>
@@ -237,6 +244,10 @@ include $rootPath."/adminAPI.php";
 		margin-top: 1px;
 		margin-left: -25px;
 	}
+	
+	label{
+		font-weight: bold;	
+	}
 	</style>
 </head>
 <body>
@@ -268,13 +279,13 @@ include $rootPath."/adminAPI.php";
 									}
 									if(substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php") && $moduleConfigXML->config->display == "dropdown"){
 										?>
-										<li onclick="location.href='?module=<?php echo substr($t, 0, -5); ?>'"><img height="16px" alt=" " src="./src/img/icons/<?php echo $moduleConfigXML->config->icon; ?>" /><?php echo $moduleConfigXML->info->name->$language; ?></li>
+										<li onClick="location.href='?module=<?php echo substr($t, 0, -5); ?>'"><img height="16px" alt=" " src="./src/img/icons/<?php echo $moduleConfigXML->config->icon; ?>" /><?php echo $moduleConfigXML->info->name->$language; ?></li>
 										<?php
 									}
 								};
 								?>
-								<li onclick="window.open('https://github.com/FelixSFD/BaruCMS')"><img src="./src/img/icons/compass_16x16.png" />Hilfe</li>
-								<li onclick="location.href='?action=logout'"><img src="./src/img/icons/arrow_left_alt1_16x16.png" />Logout</li>
+								<li onClick="window.open('https://github.com/FelixSFD/BaruCMS')"><img src="./src/img/icons/compass_16x16.png" />Hilfe</li>
+								<li onClick="location.href='?action=logout'"><img src="./src/img/icons/arrow_left_alt1_16x16.png" />Logout</li>
 							</ul>
 						</li>
 						<?php
@@ -306,7 +317,7 @@ include $rootPath."/adminAPI.php";
 						if($t != "." && $t != ".." && $t != "readme.txt" && substr($t, -5) == ".baru" && file_exists($verz."/".$t."/init.php") && $moduleConfigXML->config->display == "default"){
 							echo '<div class="menuDivider"></div>';
 							?>
-							<li class="menuColor<?php echo $menuColors[$anzahl]." ".ActiveMenu($t); ?>" onclick="location.href='backend.php?module=<?php echo substr($t, 0, -5); ?>'"><?php echo $moduleConfigXML->info->name->$language; ?></li>
+							<li class="menuColor<?php echo $menuColors[$anzahl]." ".ActiveMenu($t); ?>" onClick="location.href='backend.php?module=<?php echo substr($t, 0, -5); ?>'"><?php echo $moduleConfigXML->info->name->$language; ?></li>
 							<?php
 							if(ActiveMenu($t)){
 								?>
@@ -341,14 +352,40 @@ include $rootPath."/adminAPI.php";
 		<div class="container">
 			<?php
 			if($baru["login_ok"]){
+				$usedTables = explode(";", $currentModuleConfigXML->setup_notes->required_tables);
+				$createdTables = explode(";", $currentModuleConfigXML->setup_notes->created_tables);
+				#print_r($usedTables);
+				$missingTables = false;
 				if(ModuleExists($module) == true) {
+					if($currentModuleConfigXML->setup_notes->required_tables){
+						foreach($usedTables as $usedTable){
+							$tableRealName = $db_prefix.$usedTable;
+							$result = $db->query("SHOW TABLES LIKE '".$tableRealName."'");
+							if($result->fetch_assoc()){
+								while($row = $result->fetch_assoc()) {
+									#echo $row["Tables_in_".$db_name]."<br>";
+									#print_r($row);
+								}
+								$errorLog .= $tableRealName." gefunden<br>";
+							} else {
+								$missingTables .= "FEHLER<br>";
+								$errorLog .= $tableRealName." nicht gefunden!<br>";
+							}
+							#echo $usedTable." checked<br>";
+						}
+						if($missingTables){
+							#echo $errorLog;
+							echo errorcode("table500");
+							exit;
+						}
+					}
 					require($rootPath.'/backend/backendModules/'.$module.'.baru/init.php');
 				} else {
 					echo errorcode(404);
 				}
 			} else {
 				if($loginerror){
-					fehler($loginerror);
+					errorcode($loginerror);
 				} else {
 					errorcode(403);
 				}
@@ -373,8 +410,6 @@ include $rootPath."/adminAPI.php";
 	<div id="footer">
 		<center>
 		<?php
-		$currentModuleConfigPath = $rootPath."/backend/backendModules/".$module.".baru/config.xml";
-		$currentModuleConfigXML = simplexml_load_file($currentModuleConfigPath);
 		if($currentModuleConfigXML->config->show_footer){
 			echo "Modul <i>".$currentModuleConfigXML->info->name->$language ."</i> (Version: ".$currentModuleConfigXML->info->version .") &copy; <i>".$currentModuleConfigXML->info->author ."</i>";
 		}

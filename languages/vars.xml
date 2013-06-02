@@ -1,9 +1,49 @@
-<?xml version='1.0'?>
+<?xml version='1.0' encoding="ISO-8859-1"?>
 <languages>
-	<de-DE>
+	<de_DE>
 		<save>Speichern</save>
-	</de-DE>
-	<en-US>
+		<saving>Speichern</saving>
+		<toTop>nach oben</toTop>
+		<search>Suche</search>
+		<!-- settings.baru -->
+		<general>Allgemein</general>
+		<design>Design</design>
+		<maintenanceMode>Wartungsmodus</maintenanceMode>
+		<systemLanguage>Systemsprache</systemLanguage>
+		<pageTitle>Seitentitel</pageTitle>
+		<welcome>Willkommensmeldung</welcome>
+		<template>Template</template>
+		<activateSearch>Suchfunktion aktivieren</activateSearch>
+		<!-- sysinfo.baru -->
+		<serverInformation>Serverinformationen</serverInformation>
+		<host>Host</host>
+		<serverAdmin>Server-Admin</serverAdmin>
+		<baruCMSname>Bezeichnung</baruCMSname>
+		<developers>Entwickler</developers>
+		<coding>Programmierung</coding>
+		<translation>Übersetzung</translation>
+	</de_DE>
+	<en_US>
 		<save>Save</save>
-	</en-US>
+		<saving>Saving</saving>
+		<toTop>top</toTop>
+		<search>Search</search>
+		<!-- settings.baru -->
+		<general>General</general>
+		<design>Design</design>
+		<maintenanceMode>Maintenance mode</maintenanceMode>
+		<systemLanguage>System language</systemLanguage>
+		<pageTitle>Page title</pageTitle>
+		<welcome>Welcome-message</welcome>
+		<template>Template</template>
+		<activateSearch>Activate search</activateSearch>
+		<!-- sysinfo.baru -->
+		<serverInformation>Server information</serverInformation>
+		<host>Host</host>
+		<serverAdmin>Server admin</serverAdmin>
+		<baruCMSname>Name</baruCMSname>
+		<developers>Developers</developers>
+		<coding>Code</coding>
+		<translation>Translation</translation>
+	</en_US>
 </languages>

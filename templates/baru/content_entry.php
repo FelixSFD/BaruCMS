@@ -5,5 +5,5 @@
 <hr>
 <small>
 	Geschrieben von: <?php echo $this->_["pageData"]["AuthorInfo"]["Vorname"]." ".$this->_["pageData"]["AuthorInfo"]["Nachname"]; ?> | 
-	Kategorie: <?php echo $this->_["pageData"]["Category"]["Name"]; ?>
+	Kategorie: <a href="?category=<?php echo $this->_["pageData"]["Category"]["ID"]; ?>"><?php echo $this->_["pageData"]["Category"]["Name"]; ?></a>
 </small>

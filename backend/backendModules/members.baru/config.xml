@@ -2,8 +2,8 @@
 <moduleconfig>
 	<info>
 		<name>
-			<de-DE>Benutzer</de-DE>
-			<en-US>User</en-US>
+			<de_DE>Benutzer</de_DE>
+			<en_US>User</en_US>
 		</name>
 		<author>Felix Deil</author>
 		<version>0.5</version>

@@ -2,8 +2,8 @@
 <moduleconfig>
 	<info>
 		<name>
-			<de-DE>Inhalte</de-DE>
-			<en-US>Contents</en-US>
+			<de_DE>Inhalte</de_DE>
+			<en_US>Contents</en_US>
 		</name>
 		<author>Felix Deil</author>
 		<version>0.5</version>
